@@ -3,20 +3,20 @@
     <div class="carousel">
       <div class="swiper-container">
         <div class="swiper-wrapper">
-<!--          <div class="swiper-slide">-->
-<!--            <img style="width:100%;" src="@/assets/image/index0.jpg" alt="">-->
-<!--          </div>-->
+          <!--          <div class="swiper-slide">-->
+          <!--            <img style="width:100%;" src="@/assets/image/index0.jpg" alt="">-->
+          <!--          </div>-->
           <div class="swiper-slide">
-            <img style="width:100%;" src="@/assets/image/index3.jpg" alt="">
+            <img style="width: 100%;" src="@/assets/image/index3.jpg" alt="" />
           </div>
           <div class="swiper-slide">
-            <img style="width:100%;" src="@/assets/image/index2.jpg" alt="">
+            <img style="width: 100%;" src="@/assets/image/index2.jpg" alt="" />
           </div>
           <div class="swiper-slide">
-            <img style="width:100%;" src="@/assets/image/index1.jpg" alt="">
+            <img style="width: 100%;" src="@/assets/image/index1.jpg" alt="" />
           </div>
           <div class="swiper-slide">
-            <img style="width:100%;" src="@/assets/image/index4.jpg" alt="">
+            <img style="width: 100%;" src="@/assets/image/index4.jpg" alt="" />
           </div>
         </div>
         <div class="swiper-pagination"></div>
@@ -29,74 +29,117 @@
           <div class="item_text">
             <div class="text_t_flex">
               <div class="flex_">
-                <span>{{type2.industryQty}}</span>
-                <p>{{type2.dateName}}</p>
+                <span>{{ type2.industryQty }}</span>
+                <p>{{ type2.dateName }}</p>
               </div>
               <div class="flex_">
-                <span>{{type2.yearOnYear?`${type2.yearOnYear}%`:''}}</span>
-                <p>{{type2.yearOnYear?`同比`:''}}</p>
+                <span>{{
+                  type2.yearOnYear ? `${type2.yearOnYear}%` : ""
+                }}</span>
+                <p>{{ type2.yearOnYear ? `同比` : "" }}</p>
               </div>
               <div class="flex_">
-                <span>{{type2.monthOnMonth?`${type2.monthOnMonth}%`:''}}</span>
-                <p>{{type2.monthOnMonth?`环比`:''}}</p>
+                <span>{{
+                  type2.monthOnMonth ? `${type2.monthOnMonth}%` : ""
+                }}</span>
+                <p>{{ type2.monthOnMonth ? `环比` : "" }}</p>
               </div>
             </div>
-            <img src="@/assets/image/v1.jpg" alt="">
+            <img src="@/assets/image/v1.jpg" alt="" />
           </div>
-          <span class="btn" @click="$router.push({ path: '/dashboard',query: {item:'1'}})">查看详情</span>
+          <span
+            class="btn"
+            @click="$router.push({ path: '/dashboard', query: { item: '1' } })"
+            >查看详情</span
+          >
         </div>
-        <div class="echarts_item" style="margin-left:50px;margin-right:50px">
+        <div
+          class="echarts_item"
+          style="margin-left: 50px; margin-right: 50px;"
+        >
           <p class="p">城市汽车销量数据</p>
           <div class="item_text">
             <div class="text_t_flex">
               <div class="flex_">
-                <span>{{type1.industryQty}}</span>
-                <p v-show="type1.dateName">{{type1.dateName}}城市销量</p>
-                <p>{{type1.cityName}}</p>
+                <span>{{ type1.industryQty }}</span>
+                <p v-show="type1.dateName">{{ type1.dateName }}城市销量</p>
+                <p>{{ type1.cityName }}</p>
               </div>
             </div>
-            <img src="@/assets/image/v2.jpg" alt="">
+            <img src="@/assets/image/v2.jpg" alt="" />
           </div>
-          <span class="btn" @click="$router.push({ path: '/dashboard',query: {item:'2'}})">查看详情</span>
+          <span
+            class="btn"
+            @click="$router.push({ path: '/dashboard', query: { item: '2' } })"
+            >查看详情</span
+          >
         </div>
         <div class="echarts_item">
           <p class="p">汽车保有量数据</p>
           <div class="item_text">
             <div class="text_t_flex">
               <div class="flex_">
-                <span>{{type3.industryQty}}</span>
-                <p v-show="type3.dateName">全国狭义乘用车保有量{{type3.dateName}}</p>
+                <span>{{ type3.industryQty }}</span>
+                <p v-show="type3.dateName">
+                  全国狭义乘用车保有量{{ type3.dateName }}
+                </p>
               </div>
             </div>
-            <img src="@/assets/image/v3.jpg" alt="">
+            <img src="@/assets/image/v3.jpg" alt="" />
           </div>
-          <span class="btn" @click="$router.push({ path: '/dashboard',query: {item:'3'}})">查看详情</span>
+          <span
+            class="btn"
+            @click="$router.push({ path: '/dashboard', query: { item: '3' } })"
+            >查看详情</span
+          >
         </div>
       </div>
       <div class="item_box">
         <div class="item_list fl">
-          <img src="@/assets/image/cyc.jpg" alt="">
+          <img src="@/assets/image/cyc.jpg" alt="" />
           <span class="title_">乘用车销量</span>
-          <p class="text_">采用上险口径统计，覆盖全国、省份、城市维度，细分至品牌、车型、排挡、排量、燃料类型、细分市场等字段，每月15日左右更新</p>
-          <span class="a" @click="$router.push({ path: '/dataQuery'})">查看</span>
+          <p class="text_">
+            采用上险口径统计，覆盖全国、省份、城市维度，细分至品牌、车型、排挡、排量、燃料类型、细分市场等字段，每月15日左右更新
+          </p>
+          <span class="a" @click="$router.push({ path: '/dataQuery' })"
+            >查看</span
+          >
         </div>
         <div class="item_list fr">
-          <img src="@/assets/image/xny.jpg" alt="">
+          <img src="@/assets/image/xny.jpg" alt="" />
           <span class="title_">新能源销量</span>
-          <p class="text_">采用上险口径统计，覆盖全国、省份、城市维度，细分至品牌、车型、排挡、排量、燃料类型、细分市场等字段，每月15日左右更新</p>
-          <span class="a" @click="$router.push({ path: '/dataQuery',query: {item:'1'}})">查看</span>
+          <p class="text_">
+            采用上险口径统计，覆盖全国、省份、城市维度，细分至品牌、车型、排挡、排量、燃料类型、细分市场等字段，每月15日左右更新
+          </p>
+          <span
+            class="a"
+            @click="$router.push({ path: '/dataQuery', query: { item: '1' } })"
+            >查看</span
+          >
         </div>
         <div class="item_list fl">
-          <img src="@/assets/image/syc.jpg" alt="">
+          <img src="@/assets/image/syc.jpg" alt="" />
           <span class="title_">商用车销量</span>
-          <p class="text_">商用车销量覆盖全国、省份、城市维度，细分至车辆型号、品牌、底盘型号、发动机型号、排量、使用性质等字段，每月15日左右更新</p>
-          <span class="a" @click="$router.push({ path: '/dataQuery',query: {item:'2'}})">查看</span>
+          <p class="text_">
+            商用车销量覆盖全国、省份、城市维度，细分至车辆型号、品牌、底盘型号、发动机型号、排量、使用性质等字段，每月15日左右更新
+          </p>
+          <span
+            class="a"
+            @click="$router.push({ path: '/dataQuery', query: { item: '2' } })"
+            >查看</span
+          >
         </div>
         <div class="item_list fr">
-          <img src="@/assets/image/byl.jpg" alt="">
+          <img src="@/assets/image/byl.jpg" alt="" />
           <span class="title_">汽车保有量</span>
-          <p class="text_">根据统计多年的上险数统计分析得到细分至车型的城市保有量数据，每年1月份左右更新</p>
-          <span class="a" @click="$router.push({ path: '/dataQuery',query: {item:'3'}})">查看</span>
+          <p class="text_">
+            根据统计多年的上险数统计分析得到细分至车型的城市保有量数据，每年1月份左右更新
+          </p>
+          <span
+            class="a"
+            @click="$router.push({ path: '/dataQuery', query: { item: '3' } })"
+            >查看</span
+          >
         </div>
       </div>
     </div>
@@ -107,22 +150,22 @@
 </template>
 
 <script>
-import foot from './footer'
+import foot from "./footer";
 import { dvIndustry } from "@/api/data";
-import '@/assets/swipe/swiper.min.css';
-import '@/assets/swipe/swiper.min.js';
+import "@/assets/swipe/swiper.min.css";
+import "@/assets/swipe/swiper.min.js";
 export default {
-  name: '',
+  name: "",
   components: {
-    foot
+    foot,
   },
   data() {
     return {
-      data: '',
+      data: "",
       type1: {},
       type2: {},
       type3: {},
-    }
+    };
   },
   mounted() {
     document.title = "数觉 DataVision - 汽车销量查询_汽车保有量";
@@ -130,106 +173,107 @@ export default {
     this.init();
   },
   methods: {
-    init(){
-      new Swiper('.swiper-container', {
+    init() {
+      new Swiper(".swiper-container", {
         autoplay: 3000,
         loop: true,
-        pagination : '.swiper-pagination',
+        pagination: ".swiper-pagination",
       });
     },
     // 获取数据
     dvIndustry() {
-      dvIndustry().then( res => {
-        let data = res.data || []
+      dvIndustry().then((res) => {
+        let data = res.data || [];
         this.type1 = data[0] || {};
         this.type2 = data[1] || {};
         this.type3 = data[2] || {};
-      })
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>
-p{
+p {
   margin: 0;
   padding: 0;
 }
-.center_{
+.center_ {
   width: 100%;
   height: 100%;
   overflow: auto;
-  padding-top: 50px;
+  padding-top: 54px;
   /* background-color: #f2f2f2; */
 }
-.carousel{
+.carousel {
   width: 100%;
   /* height: 500px; */
   margin-bottom: 50px;
-  justify-content:center;
-  align-items:center;
+  justify-content: center;
+  align-items: center;
   display: flex;
   background-color: #f2f2f2;
   /* background-color: #021033; */
   /* overflow: hidden; */
 }
-.box{
+.box {
   width: 1224px;
   margin: 0 auto;
 }
-.echarts{
+.echarts {
   width: 100%;
   display: flex;
 }
-.echarts_item{
+.echarts_item {
   height: 500px;
   flex: 1;
-  box-shadow:0px 2px 4px 0px rgba(0,0,0,0.12),0px 0px 6px 0px rgba(0,0,0,0.04);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12),
+    0px 0px 6px 0px rgba(0, 0, 0, 0.04);
   /* border: solid 1px #E5E5E5; */
   padding-bottom: 50px;
   position: relative;
   border-radius: 10px;
   margin-bottom: 50px;
 }
-.item_text{
+.item_text {
   width: 100%;
   padding-top: 15px;
   height: calc(100% - 50px);
   text-align: center;
 }
-.item_text .text_t_flex{
+.item_text .text_t_flex {
   display: flex;
   width: 100%;
   padding: 10px 20px;
   text-align: center;
 }
-.flex_{
+.flex_ {
   flex: 1;
 }
-.flex_ span{
+.flex_ span {
   font-size: 20px;
   display: inline-block;
   margin-bottom: 5px;
   font-weight: 600;
 }
-.flex_ p{
+.flex_ p {
   font-size: 12px;
   margin-top: 5px;
 }
-.echarts_item .p{
+.echarts_item .p {
   line-height: 50px;
   padding: 0;
   margin: 0;
   text-align: center;
-  border-bottom: solid 1px #E5E5E5;
+  border-bottom: solid 1px #e5e5e5;
 }
-.echarts_item .btn{
+.echarts_item .btn {
   width: 100px;
   height: 30px;
   line-height: 30px;
   position: absolute;
   bottom: 20px;
-  background-color: #24A2A1;
+  background-color: #24a2a1;
   color: #fff;
   font-size: 16px;
   text-align: center;
@@ -238,51 +282,52 @@ p{
   margin-left: -50px;
   cursor: pointer;
 }
-.item_box{
+.item_box {
   width: 100%;
   overflow: hidden;
   padding: 5px 2px;
 }
-.fl{
+.fl {
   float: left;
 }
-.fr{
+.fr {
   float: right;
 }
-.item_list{
+.item_list {
   width: 550px;
   height: 160px;
   padding-left: 220px;
   position: relative;
   /* border: solid 1px #f5f5f5; */
-  box-shadow:0px 2px 4px 2px rgba(0,0,0,0.12),0px 0px 6px 0px rgba(0,0,0,0.04);
+  box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.12),
+    0px 0px 6px 0px rgba(0, 0, 0, 0.04);
   margin-bottom: 50px;
   cursor: pointer;
   padding-top: 20px;
 }
-.item_list .a{
-  color:#fff;
+.item_list .a {
+  color: #fff;
   width: 60px;
   height: 30px;
   position: absolute;
   right: 20px;
   bottom: 10px;
-  background-color: #24A2A1;
+  background-color: #24a2a1;
   text-align: center;
   border-radius: 15px;
   line-height: 30px;
   font-size: 16px;
 }
-.title_{
+.title_ {
   font-size: 20px;
 }
-.text_{
-  color:#9BA8C2;
+.text_ {
+  color: #9ba8c2;
   font-size: 14px;
   line-height: 1.4;
   padding-top: 15px;
 }
-.item_list img{
+.item_list img {
   height: 160px;
   width: 200px;
   position: absolute;
@@ -314,8 +359,7 @@ p{
   align-items: center;
 }
 
-.center_ >>> .swiper-pagination-bullet-active{
-  background-color: #24A2A1;
+.center_ >>> .swiper-pagination-bullet-active {
+  background-color: #24a2a1;
 }
 </style>
-
