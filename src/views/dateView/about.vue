@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div class="title_s">
-      <img src="@/assets/image/about2 1920x600.jpg" alt="" />
+      <img src="@/assets/image/about2 1920x600.jpg" alt />
       <div class="text_title">
         <p style="color: #fff;">致力于推动汽车产业</p>
         <p style="color: #000;">建立以数据为基础的决策飞轮</p>
@@ -24,9 +24,7 @@
           >
             <p>数觉 Data Vision</p>
             <p>汽车数据服务平台</p>
-            <p>
-              汇聚全国、省份、城市维度的汽车销量数据，为主机厂、经销商、金融保险机构、大学院校、广告营销机构、媒体等提供完整的汽车产业数据，为汽车产业用户提供专业的数据查询、数据分析等在线数据服务
-            </p>
+            <p>汇聚全国、省份、城市维度的汽车销量数据，为主机厂、经销商、金融保险机构、大学院校、广告营销机构、媒体等提供完整的汽车产业数据，为汽车产业用户提供专业的数据查询、数据分析等在线数据服务</p>
           </div>
         </div>
         <div class="item_i">
@@ -35,18 +33,13 @@
             :onload="(imgFinish = true)"
             class="img"
             src="@/assets/image/about 2 900x600.jpg"
-            alt=""
+            alt
           />
         </div>
       </div>
       <div class="item_">
         <div class="item_t box2">
-          <img
-            class="img"
-            style="float: right;"
-            src="@/assets/image/about900x600.jpg"
-            alt=""
-          />
+          <img class="img" style="float: right;" src="@/assets/image/about900x600.jpg" alt />
         </div>
         <div class="item_i box1">
           <h1>我们的愿景</h1>
@@ -70,25 +63,24 @@ export default {
     window.removeEventListener("resize", this.onResize);
   },
   components: {
-    foot,
+    foot
   },
   data() {
     return {
-      imgFinish: false,
+      imgFinish: false
     };
   },
   methods: {
     onResize() {
       if (this.$refs && this.$refs.textRef && this.$refs.imgRef) {
         if (this.$refs.textRef.clientWidth >= 630) {
-          this.$refs.textRef.style.height = `${
-            this.$refs.imgRef.clientHeight - 110
-          }px`;
+          this.$refs.textRef.style.height = `${this.$refs.imgRef.clientHeight -
+            110}px`;
         } else {
           this.$refs.textRef.style.height = "auto";
         }
       }
-    },
+    }
   },
   watch: {
     imgFinish(val) {
@@ -98,8 +90,8 @@ export default {
           window.addEventListener("resize", this.onResize);
         }, 100);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -107,7 +99,7 @@ export default {
 .box {
   width: 100%;
   height: 100%;
-  padding-top: 54px;
+  padding-top: 50px;
 }
 .title_s {
   position: relative;

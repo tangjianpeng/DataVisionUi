@@ -3,60 +3,36 @@
     <div class="center_l">
       <div class="itemBox_">
         <span class="sp">乘用车销量</span>
-        <p @click="onClickData = 'dataAll'" :class="color('dataAll')">
-          全国乘用车销量
-        </p>
-        <p @click="onClickData = 'dataProvince'" :class="color('dataProvince')">
-          省份乘用车销量
-        </p>
-        <p @click="onClickData = 'dataCity'" :class="color('dataCity')">
-          城市乘用车销量
-        </p>
+        <p @click="onClickData = 'dataAll'" :class="color('dataAll')">全国乘用车销量</p>
+        <p @click="onClickData = 'dataProvince'" :class="color('dataProvince')">省份乘用车销量</p>
+        <p @click="onClickData = 'dataCity'" :class="color('dataCity')">城市乘用车销量</p>
       </div>
       <div class="itemBox_">
         <span class="sp">新能源销量</span>
-        <p @click="onClickData = 'newEnergy_a'" :class="color('newEnergy_a')">
-          全国新能源销量
-        </p>
-        <p @click="onClickData = 'newEnergy_b'" :class="color('newEnergy_b')">
-          省份新能源销量
-        </p>
-        <p @click="onClickData = 'newEnergy_c'" :class="color('newEnergy_c')">
-          城市新能源销量
-        </p>
+        <p @click="onClickData = 'newEnergy_a'" :class="color('newEnergy_a')">全国新能源销量</p>
+        <p @click="onClickData = 'newEnergy_b'" :class="color('newEnergy_b')">省份新能源销量</p>
+        <p @click="onClickData = 'newEnergy_c'" :class="color('newEnergy_c')">城市新能源销量</p>
       </div>
       <div class="itemBox_">
         <span class="sp">商用车销量</span>
         <p
           @click="onClickData = 'commercialVehicle_a'"
           :class="color('commercialVehicle_a')"
-        >
-          全国商用车销量
-        </p>
+        >全国商用车销量</p>
         <p
           @click="onClickData = 'commercialVehicle_b'"
           :class="color('commercialVehicle_b')"
-        >
-          省份商用车销量
-        </p>
+        >省份商用车销量</p>
         <p
           @click="onClickData = 'commercialVehicle_c'"
           :class="color('commercialVehicle_c')"
-        >
-          城市商用车销量
-        </p>
+        >城市商用车销量</p>
       </div>
       <div class="itemBox_">
         <span class="sp">汽车保有量</span>
-        <p @click="onClickData = 'ownership_a'" :class="color('ownership_a')">
-          全国汽车保有量
-        </p>
-        <p @click="onClickData = 'ownership_b'" :class="color('ownership_b')">
-          省份汽车保有量
-        </p>
-        <p @click="onClickData = 'ownership_c'" :class="color('ownership_c')">
-          城市汽车保有量
-        </p>
+        <p @click="onClickData = 'ownership_a'" :class="color('ownership_a')">全国汽车保有量</p>
+        <p @click="onClickData = 'ownership_b'" :class="color('ownership_b')">省份汽车保有量</p>
+        <p @click="onClickData = 'ownership_c'" :class="color('ownership_c')">城市汽车保有量</p>
       </div>
     </div>
     <div class="center_r">
@@ -121,25 +97,19 @@
         @messageBox="dialogVisible = true"
       ></stockCity>
     </div>
-    <el-dialog
-      title="友情提示"
-      :visible.sync="dialogVisible"
-      width="400px"
-      :show-close="false"
-    >
+    <el-dialog title="友情提示" :visible.sync="dialogVisible" width="400px" :show-close="false">
       <p v-if="userId === '0'" style="text-align: center;">
-        请先<span style="color: red;" @click="to('login')">登陆</span>后购买数据
+        请先
+        <span style="color: red;" @click="to('login')">登陆</span>后购买数据
       </p>
       <p v-if="userId === '0'" style="text-align: center;">
-        如还没有账号请<span style="color: red;" @click="to('registered')"
-          >注册</span
-        >
+        如还没有账号请
+        <span style="color: red;" @click="to('registered')">注册</span>
       </p>
 
       <p v-if="userId != '0'" style="text-align: center;">
-        您的权限不足，请先<span style="color: red;" @click="to('buy')"
-          >购买</span
-        >数据
+        您的权限不足，请先
+        <span style="color: red;" @click="to('buy')">购买</span>数据
       </p>
 
       <span slot="footer" class="dialog-footer">
@@ -147,8 +117,7 @@
           type="primary"
           style="background-color: #24a2a1; border-color: #24a2a1;"
           @click="dialogVisible = false"
-          >取消</el-button
-        >
+        >取消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -181,7 +150,7 @@ export default {
     traderProvince,
     stockAll,
     stockCity,
-    stockProvince,
+    stockProvince
   },
   data() {
     return {
@@ -199,10 +168,10 @@ export default {
         commercialVehicle_c: "car:commerCity:list",
         ownership_a: "car:stock:list",
         ownership_b: "car:stockProvince:list",
-        ownership_c: "car:stockCity:list",
+        ownership_c: "car:stockCity:list"
       },
       dialogVisible: false,
-      userId: "",
+      userId: ""
     };
   },
   mounted() {
@@ -230,7 +199,7 @@ export default {
     to(data) {
       this.dialogVisible = false;
       this.$router.push({ path: "/" + data });
-    },
+    }
   },
   watch: {
     permissions(data) {
@@ -238,19 +207,19 @@ export default {
     },
     onClickData(data) {
       this.authorityFun();
-    },
+    }
   },
   computed: {
-    color: function (data) {
-      return function (data) {
+    color: function(data) {
+      return function(data) {
         if (this.onClickData === data) return "color_";
         return "";
       };
     },
-    permissions: function () {
+    permissions: function() {
       return this.$store.getters.user.permissions || [];
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -262,10 +231,10 @@ div {
   width: 100%;
   height: 100%;
   display: flex;
-  padding-top: 54px;
+  padding-top: 50px;
 }
 .center_l {
-  width: 240px;
+  width: 220px;
   height: 100%;
   background-color: #343c48;
   padding-top: 16px;
@@ -275,7 +244,7 @@ div {
   text-align: center;
 }
 .center_l .itemBox_ .sp {
-  font-size: 24px;
+  font-size: 22px;
   color: #fff;
   line-height: 40px;
   display: inline-block;

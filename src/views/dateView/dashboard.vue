@@ -3,47 +3,25 @@
     <div class="center_l">
       <div class="itemBox_">
         <span class="sp">乘用车销量</span>
-        <p @click="onClickData = 'car2'" :class="color('car2')">
-          全国乘用车销量
-        </p>
-        <p @click="onClickData = 'car3'" :class="color('car3')">
-          省份乘用车销量
-        </p>
-        <p @click="onClickData = 'car4'" :class="color('car4')">
-          城市乘用车销量
-        </p>
+        <p @click="onClickData = 'car2'" :class="color('car2')">全国乘用车销量</p>
+        <p @click="onClickData = 'car3'" :class="color('car3')">省份乘用车销量</p>
+        <p @click="onClickData = 'car4'" :class="color('car4')">城市乘用车销量</p>
       </div>
       <div class="itemBox_">
         <span class="sp">新能源销量</span>
-        <p @click="onClickData = 'energy2'" :class="color('energy2')">
-          全国新能源销量
-        </p>
-        <p @click="onClickData = 'energy3'" :class="color('energy3')">
-          省份新能源销量
-        </p>
-        <p @click="onClickData = 'energy4'" :class="color('energy4')">
-          城市新能源销量
-        </p>
+        <p @click="onClickData = 'energy2'" :class="color('energy2')">全国新能源销量</p>
+        <p @click="onClickData = 'energy3'" :class="color('energy3')">省份新能源销量</p>
+        <p @click="onClickData = 'energy4'" :class="color('energy4')">城市新能源销量</p>
       </div>
       <div class="itemBox_">
         <span class="sp">汽车保有量</span>
-        <p @click="onClickData = 'ownership_2'" :class="color('ownership_2')">
-          全国汽车保有量
-        </p>
-        <p @click="onClickData = 'ownership_3'" :class="color('ownership_3')">
-          省份汽车保有量
-        </p>
-        <p @click="onClickData = 'ownership_4'" :class="color('ownership_4')">
-          城市汽车保有量
-        </p>
+        <p @click="onClickData = 'ownership_2'" :class="color('ownership_2')">全国汽车保有量</p>
+        <p @click="onClickData = 'ownership_3'" :class="color('ownership_3')">省份汽车保有量</p>
+        <p @click="onClickData = 'ownership_4'" :class="color('ownership_4')">城市汽车保有量</p>
       </div>
     </div>
     <div class="center_r">
-      <dashboardBox
-        ref="dashboardBox"
-        :time="time"
-        :times="time_on"
-      ></dashboardBox>
+      <dashboardBox ref="dashboardBox" :time="time" :times="time_on"></dashboardBox>
     </div>
   </div>
 </template>
@@ -55,13 +33,13 @@ import dashboardBox from "@/components/dataVision/dashboard/dashboardBox";
 export default {
   name: "dashboard",
   components: {
-    dashboardBox,
+    dashboardBox
   },
   data() {
     return {
       onClickData: "",
       time: "",
-      time_on: "",
+      time_on: ""
     };
   },
   mounted() {
@@ -71,7 +49,7 @@ export default {
   },
   methods: {
     dvIndustry() {
-      dvIndustry().then((res) => {
+      dvIndustry().then(res => {
         let data = res.data || [];
         if (data.length > 0) {
           this.time = data[3].dateName;
@@ -92,21 +70,21 @@ export default {
         if (name === "3") this.onClickData = "ownership_4";
         // this.$refs.dashboardBox.init(this.onClickData);
       });
-    },
+    }
   },
   watch: {
     onClickData(data) {
       this.$refs.dashboardBox.init(data);
-    },
+    }
   },
   computed: {
-    color: function (data) {
-      return function (data) {
+    color: function(data) {
+      return function(data) {
         if (this.onClickData === data) return "color_";
         return "";
       };
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -118,10 +96,10 @@ div {
   width: 100%;
   height: 100%;
   display: flex;
-  padding-top: 54px;
+  padding-top: 50px;
 }
 .center_l {
-  width: 240px;
+  width: 220px;
   height: 100%;
   background-color: #343c48;
   padding-top: 16px;
@@ -131,7 +109,7 @@ div {
   text-align: center;
 }
 .center_l .itemBox_ .sp {
-  font-size: 24px;
+  font-size: 22px;
   color: #fff;
   line-height: 40px;
   display: inline-block;
