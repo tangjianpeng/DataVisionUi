@@ -53,10 +53,7 @@
             >查看详情</span
           >
         </div>
-        <div
-          class="echarts_item"
-          style="margin-left: 50px; margin-right: 50px;"
-        >
+        <div class="echarts_item">
           <p class="p">城市汽车销量数据</p>
           <div class="item_text">
             <div class="text_t_flex">
@@ -94,8 +91,8 @@
           >
         </div>
       </div>
-      <div class="item_box">
-        <div class="item_list fl">
+      <div :class="isMobile ? 'item_box_mobile' : 'item_box_pc'">
+        <div class="item_list">
           <img src="@/assets/image/cyc.jpg" alt="" />
           <span class="title_">乘用车销量</span>
           <p class="text_">
@@ -105,7 +102,7 @@
             >查看</span
           >
         </div>
-        <div class="item_list fr">
+        <div class="item_list">
           <img src="@/assets/image/xny.jpg" alt="" />
           <span class="title_">新能源销量</span>
           <p class="text_">
@@ -117,7 +114,7 @@
             >查看</span
           >
         </div>
-        <div class="item_list fl">
+        <div class="item_list">
           <img src="@/assets/image/syc.jpg" alt="" />
           <span class="title_">商用车销量</span>
           <p class="text_">
@@ -129,7 +126,7 @@
             >查看</span
           >
         </div>
-        <div class="item_list fr">
+        <div class="item_list">
           <img src="@/assets/image/byl.jpg" alt="" />
           <span class="title_">汽车保有量</span>
           <p class="text_">
@@ -154,6 +151,11 @@ import foot from "./footer";
 import { dvIndustry } from "@/api/data";
 import "@/assets/swipe/swiper.min.css";
 import "@/assets/swipe/swiper.min.js";
+
+const isMobile =
+  window.navigator.userAgent.match(
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+  ) !== null;
 export default {
   name: "",
   components: {
@@ -165,6 +167,7 @@ export default {
       type1: {},
       type2: {},
       type3: {},
+      isMobile,
     };
   },
   mounted() {
@@ -224,6 +227,10 @@ p {
   width: 100%;
   display: flex;
 }
+.echarts {
+  width: 100%;
+  display: flex;
+}
 .echarts_item {
   height: 500px;
   flex: 1;
@@ -234,6 +241,9 @@ p {
   position: relative;
   border-radius: 10px;
   margin-bottom: 50px;
+}
+.echarts .echarts_item:nth-child(2) {
+  margin: 0 50px;
 }
 .item_text {
   width: 100%;
@@ -282,16 +292,11 @@ p {
   margin-left: -50px;
   cursor: pointer;
 }
-.item_box {
+.item_box_pc,
+.item_box_mobile {
   width: 100%;
   overflow: hidden;
   padding: 5px 2px;
-}
-.fl {
-  float: left;
-}
-.fr {
-  float: right;
 }
 .item_list {
   width: 550px;
@@ -305,6 +310,13 @@ p {
   cursor: pointer;
   padding-top: 20px;
 }
+.item_box_pc .item_list:nth-child(odd) {
+  float: left;
+}
+.item_box_pc .item_list:nth-child(even) {
+  float: right;
+}
+
 .item_list .a {
   color: #fff;
   width: 60px;
@@ -330,6 +342,20 @@ p {
 .item_list img {
   height: 160px;
   width: 200px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.item_box_mobile .item_list {
+  width: 1224px;
+  height: 320px;
+  padding-left: 440px;
+}
+
+.item_box_mobile .item_list img {
+  width: 400px;
+  height: 320px;
   position: absolute;
   top: 0;
   left: 0;
