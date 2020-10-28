@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="ctr">
     <div class="nav_ navbar">
-      <img class="imgBox" src="@/assets/image/logo3.png" alt />
+      <img class="imgBox" src="@/assets/image/logo4.png" alt />
       <el-tabs class="nav_top" v-model="activeName" style="height: 50px;" @tab-click="handleClick">
         <el-tab-pane label="首页" name="index_home"></el-tab-pane>
         <el-tab-pane label="数据查询" name="dataQuery"></el-tab-pane>
@@ -173,14 +173,14 @@ export default {
   margin: 0;
 }
 .nav_ >>> .el-tabs__nav-scroll {
-  padding-left: 240px;
+  padding-left: 340px;
 }
 .nav_ .imgBox {
   position: absolute;
-  left: 0px;
-  top: 0;
-  width: 220px;
-  height: 50px;
+  top: 5px;
+  left: 20px;
+  width: 160px;
+  height: 40px;
 }
 .registered {
   position: absolute;
