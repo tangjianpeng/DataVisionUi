@@ -1,0 +1,165 @@
+[
+  {
+    "id": "ym_id",
+    "prop": "ymId",
+    "name": "年月",
+    "disabled": true,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "省份",
+    "id": "province_name",
+    "key": "provinceName",
+    "disabled": true,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "城市",
+    "id": "city_name",
+    "key": "cityName",
+    "disabled": true,
+    "isCheck": false,
+    "isColumn": false,
+    "isSelect": false
+  },
+  {
+    "id": "orig_enterprise_name",
+    "key": "origEnterpriseName",
+    "name": "企业名称",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect--": true
+  },
+  {
+    "id": "announce_model_code",
+    "key": "announceModelCode",
+    "name": "车辆型号",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect--": true
+  },
+  {
+    "id": "brand_name",
+    "key": "brandName",
+    "name": "品牌",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "id": "base_manf_name",
+    "key": "baseManfName",
+    "name": "底盘企业",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect--": true
+  },
+  {
+    "id": "base_name",
+    "key": "baseName",
+    "name": "底盘型号",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect--": true
+  },
+  {
+    "id": "fuel_type_name",
+    "key": "fuelTypeName",
+    "name": "燃料",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect--": true
+  },
+  {
+    "id": "displacement",
+    "key": "displacement",
+    "name": "排量",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect--": true
+  },
+  {
+    "id": "emission_standards",
+    "key": "emissionStandards",
+    "name": "排放标准",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect--": true
+  },
+  {
+    "id": "use_prop",
+    "key": "useProp",
+    "name": "使用性质",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect--": true
+  },
+  {
+    "id": "vehicle_type",
+    "key": "vehicleType",
+    "name": "车量类别",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": false
+  },
+  {
+    "id": "vehicle_type2",
+    "key": "vehicleType2",
+    "name": "车量名称",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": false
+  },
+  {
+    "id": "engine_model",
+    "key": "engineModel",
+    "name": "发动机号",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": false
+  },
+  {
+    "id": "engine_product_enterprise",
+    "key": "engineProductEnterprise",
+    "name": "发动机企业",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": false
+  },
+  {
+    "id": "power",
+    "key": "power",
+    "name": "功率",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": false
+  },
+  {
+    "width": "100",
+    "name": "数量",
+    "id": "sales_qty",
+    "key": "salesQty",
+    "disabled": false,
+    "isCheck": false,
+    "isColumn": true,
+    "isSelect": false
+  }
+]

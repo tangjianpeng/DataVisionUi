@@ -1,0 +1,138 @@
+[
+  {
+    "name": "年月",
+    "id": "ym_id",
+    "key": "ymId",
+    "disabled": true,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "省份",
+    "id": "province_name",
+    "key": "provinceName",
+    "disabled": true,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "城市",
+    "id": "city_name",
+    "key": "cityName",
+    "disabled": true,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "品牌",
+    "id": "brand_name",
+    "key": "brandName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "厂商",
+    "id": "manf_name",
+    "key": "manfName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "车型",
+    "id": "sub_model_name",
+    "key": "subModelName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "燃料类型",
+    "id": "fuel_type_name",
+    "key": "fuelTypeName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "排挡",
+    "id": "tran_type_name",
+    "key": "tranTypeName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": false
+  },
+  {
+    "name": "排量",
+    "id": "engine_type_name",
+    "key": "engineTypeName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "厂商属性",
+    "id": "manf_prop_name",
+    "key": "manfPropName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": false
+  },
+  {
+    "name": "品牌血统",
+    "id": "brand_orig_name",
+    "key": "brandOrigName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": false
+  },
+  {
+    "name": "汽车类别",
+    "id": "vehicle_func_name",
+    "key": "vehicleFuncName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": false
+  },
+  {
+    "name": "汽车类型",
+    "id": "segment_name",
+    "key": "segmentName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "name": "细分市场",
+    "id": "segment_full_name",
+    "key": "segmentFullName",
+    "disabled": false,
+    "isCheck": true,
+    "isColumn": true,
+    "isSelect": true
+  },
+  {
+    "width": "100",
+    "name": "数量",
+    "id": "sales_qty",
+    "key": "salesQty",
+    "disabled": false,
+    "isCheck": false,
+    "isColumn": true,
+    "isSelect": false
+  }
+]

@@ -2,7 +2,12 @@
   <div id="app" class="ctr">
     <div class="nav_ navbar">
       <img class="imgBox" src="@/assets/image/logo4.png" alt />
-      <el-tabs class="nav_top" v-model="activeName" style="height: 50px;" @tab-click="handleClick">
+      <el-tabs
+        class="nav_top"
+        v-model="activeName"
+        style="height: 50px;"
+        @tab-click="handleClick"
+      >
         <el-tab-pane label="首页" name="index_home"></el-tab-pane>
         <el-tab-pane label="数据查询" name="dataQuery"></el-tab-pane>
         <el-tab-pane label="排行榜" name="leaderBoard"></el-tab-pane>
@@ -34,7 +39,10 @@
           <router-link to="/user/personalInfo">
             <el-dropdown-item>个人中心</el-dropdown-item>
           </router-link>
-          <router-link to="/dataVision_home" v-if="permissions.includes('car:data:admin')">
+          <router-link
+            to="/dataVision_home"
+            v-if="permissions.includes('car:data:admin')"
+          >
             <el-dropdown-item>
               <span>后台管理</span>
             </el-dropdown-item>
@@ -46,7 +54,12 @@
       </el-dropdown>
     </div>
     <router-view />
-    <el-dialog title="友情提示" :visible.sync="dialogVisible" width="400px" :show-close="false">
+    <el-dialog
+      title="友情提示"
+      :visible.sync="dialogVisible"
+      width="400px"
+      :show-close="false"
+    >
       <p style="text-align: center;">
         请先
         <span style="color: red;" @click="to('login')">登陆</span>后购买数据
@@ -60,7 +73,8 @@
           type="primary"
           style="background-color: #24a2a1; border-color: #24a2a1;"
           @click="dialogVisible = false"
-        >取消</el-button>
+          >取消</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -77,7 +91,7 @@ export default {
       activeName: "index_home",
       show: true,
       dataName: "index_home",
-      dialogVisible: false
+      dialogVisible: false,
     };
   },
   created() {
@@ -114,17 +128,17 @@ export default {
       this.$confirm("确定注销并退出系统吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       }).then(() => {
         this.$store.dispatch("LogOut").then(() => {
           location.reload();
         });
       });
-    }
+    },
   },
   watch: {
     $route: {
-      handler: function(val, oldVal) {
+      handler: function (val, oldVal) {
         let authority = "car:data:admin";
         this.show = true;
         this.activeName = val.name;
@@ -142,22 +156,22 @@ export default {
         // }
       },
       // 深度观察监听
-      deep: true
+      deep: true,
     },
-    permissions: function(data) {}
+    permissions: function (data) {},
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"]),
-    userName: function() {
+    userName: function () {
       return this.$store.getters.user.name || "";
     },
-    company: function() {
+    company: function () {
       return this.$store.getters.user.company || "";
     },
-    permissions: function() {
+    permissions: function () {
       return this.$store.getters.user.permissions || [];
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -173,7 +187,7 @@ export default {
   margin: 0;
 }
 .nav_ >>> .el-tabs__nav-scroll {
-  padding-left: 340px;
+  padding-left: 280px;
 }
 .nav_ .imgBox {
   position: absolute;

@@ -3,36 +3,60 @@
     <div class="center_l">
       <div class="itemBox_">
         <span class="sp">乘用车销量</span>
-        <p @click="onClickData = 'dataAll'" :class="color('dataAll')">全国乘用车销量</p>
-        <p @click="onClickData = 'dataProvince'" :class="color('dataProvince')">省份乘用车销量</p>
-        <p @click="onClickData = 'dataCity'" :class="color('dataCity')">城市乘用车销量</p>
+        <p @click="onClickData = 'dataAll'" :class="color('dataAll')">
+          全国乘用车销量
+        </p>
+        <p @click="onClickData = 'dataProvince'" :class="color('dataProvince')">
+          省份乘用车销量
+        </p>
+        <p @click="onClickData = 'dataCity'" :class="color('dataCity')">
+          城市乘用车销量
+        </p>
       </div>
       <div class="itemBox_">
         <span class="sp">新能源销量</span>
-        <p @click="onClickData = 'newEnergy_a'" :class="color('newEnergy_a')">全国新能源销量</p>
-        <p @click="onClickData = 'newEnergy_b'" :class="color('newEnergy_b')">省份新能源销量</p>
-        <p @click="onClickData = 'newEnergy_c'" :class="color('newEnergy_c')">城市新能源销量</p>
+        <p @click="onClickData = 'newEnergy_a'" :class="color('newEnergy_a')">
+          全国新能源销量
+        </p>
+        <p @click="onClickData = 'newEnergy_b'" :class="color('newEnergy_b')">
+          省份新能源销量
+        </p>
+        <p @click="onClickData = 'newEnergy_c'" :class="color('newEnergy_c')">
+          城市新能源销量
+        </p>
       </div>
       <div class="itemBox_">
         <span class="sp">商用车销量</span>
         <p
           @click="onClickData = 'commercialVehicle_a'"
           :class="color('commercialVehicle_a')"
-        >全国商用车销量</p>
+        >
+          全国商用车销量
+        </p>
         <p
           @click="onClickData = 'commercialVehicle_b'"
           :class="color('commercialVehicle_b')"
-        >省份商用车销量</p>
+        >
+          省份商用车销量
+        </p>
         <p
           @click="onClickData = 'commercialVehicle_c'"
           :class="color('commercialVehicle_c')"
-        >城市商用车销量</p>
+        >
+          城市商用车销量
+        </p>
       </div>
       <div class="itemBox_">
         <span class="sp">汽车保有量</span>
-        <p @click="onClickData = 'ownership_a'" :class="color('ownership_a')">全国汽车保有量</p>
-        <p @click="onClickData = 'ownership_b'" :class="color('ownership_b')">省份汽车保有量</p>
-        <p @click="onClickData = 'ownership_c'" :class="color('ownership_c')">城市汽车保有量</p>
+        <p @click="onClickData = 'ownership_a'" :class="color('ownership_a')">
+          全国汽车保有量
+        </p>
+        <p @click="onClickData = 'ownership_b'" :class="color('ownership_b')">
+          省份汽车保有量
+        </p>
+        <p @click="onClickData = 'ownership_c'" :class="color('ownership_c')">
+          城市汽车保有量
+        </p>
       </div>
     </div>
     <div class="center_r">
@@ -97,10 +121,16 @@
         @messageBox="dialogVisible = true"
       ></stockCity>
     </div>
-    <el-dialog title="友情提示" :visible.sync="dialogVisible" width="400px" :show-close="false">
+    <el-dialog
+      title="友情提示"
+      :visible.sync="dialogVisible"
+      width="400px"
+      :show-close="false"
+    >
       <p v-if="userId === '0'" style="text-align: center;">
         请先
-        <span style="color: red;" @click="to('login')">登陆</span>后购买数据
+        <span style="color: red;" @click="to('login')">登陆</span>
+        后购买数据
       </p>
       <p v-if="userId === '0'" style="text-align: center;">
         如还没有账号请
@@ -117,7 +147,8 @@
           type="primary"
           style="background-color: #24a2a1; border-color: #24a2a1;"
           @click="dialogVisible = false"
-        >取消</el-button>
+          >取消</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -136,12 +167,28 @@ const traderProvince = () => import("./data/traderProvince");
 const stockAll = () => import("./data/stockAll");
 const stockCity = () => import("./data/stockCity");
 const stockProvince = () => import("./data/stockProvince");
+
+const powerEnum = {
+  dataAll: "car:salesVolume:list",
+  dataProvince: "car:salesVolumeProvince:list",
+  dataCity: "car:salesVolumeCity:list",
+  newEnergy_a: "car:energyNew:list",
+  newEnergy_b: "car:energyNewProvince:list",
+  newEnergy_c: "car:energyNewCity:list",
+  commercialVehicle_a: "car:commer:list",
+  commercialVehicle_b: "car:commerProvince:list",
+  commercialVehicle_c: "car:commerCity:list",
+  ownership_a: "car:stock:list",
+  ownership_b: "car:stockProvince:list",
+  ownership_c: "car:stockCity:list",
+};
+
 export default {
   name: "",
   components: {
     dataAll,
-    dataCity,
     dataProvince,
+    dataCity,
     newEnergyAll,
     newEnergyCity,
     newEnergyProvince,
@@ -150,29 +197,20 @@ export default {
     traderProvince,
     stockAll,
     stockCity,
-    stockProvince
+    stockProvince,
   },
   data() {
     return {
       onClickData: "dataAll",
       authority: false, //权限
-      valData: {
-        dataAll: "car:salesVolume:list",
-        dataProvince: "car:salesVolumeProvince:list",
-        dataCity: "car:salesVolumeCity:list",
-        newEnergy_a: "car:energyNew:list",
-        newEnergy_b: "car:energyNewProvince:list",
-        newEnergy_c: "car:energyNewCity:list",
-        commercialVehicle_a: "car:commer:list",
-        commercialVehicle_b: "car:commerProvince:list",
-        commercialVehicle_c: "car:commerCity:list",
-        ownership_a: "car:stock:list",
-        ownership_b: "car:stockProvince:list",
-        ownership_c: "car:stockCity:list"
-      },
       dialogVisible: false,
-      userId: ""
+      userId: "",
     };
+  },
+  computed: {
+    permissions: function () {
+      return this.$store.getters.user.permissions || [];
+    },
   },
   mounted() {
     document.title =
@@ -190,36 +228,29 @@ export default {
     if (name === "3") this.onClickData = "ownership_a";
     this.authorityFun();
   },
-  methods: {
-    authorityFun() {
-      if (this.permissions.length === 0) return;
-      let authority = this.valData[this.onClickData] || "";
-      this.authority = this.permissions.includes(authority);
-    },
-    to(data) {
-      this.dialogVisible = false;
-      this.$router.push({ path: "/" + data });
-    }
-  },
   watch: {
     permissions(data) {
       this.authorityFun();
     },
     onClickData(data) {
       this.authorityFun();
-    }
-  },
-  computed: {
-    color: function(data) {
-      return function(data) {
-        if (this.onClickData === data) return "color_";
-        return "";
-      };
     },
-    permissions: function() {
-      return this.$store.getters.user.permissions || [];
-    }
-  }
+  },
+  methods: {
+    authorityFun() {
+      if (this.permissions.length === 0) return;
+      let authority = powerEnum[this.onClickData] || "";
+      this.authority = this.permissions.includes(authority);
+    },
+    color: function (data) {
+      if (this.onClickData === data) return "color_";
+      return undefined;
+    },
+    to(data) {
+      this.dialogVisible = false;
+      this.$router.push({ path: "/" + data });
+    },
+  },
 };
 </script>
 
@@ -265,7 +296,7 @@ div {
   width: calc(100% - 160px);
   height: 100%;
   overflow: auto;
-  background-color: #fff;
+  background-color: #e7eaf2;
   padding: 0 12px;
 }
 .center_l .itemBox_ .color_ {
