@@ -25,6 +25,7 @@
       </div>
       <div class="selectionFooter">
         <el-button type="primary" @click="search">查 询</el-button>
+        <el-button type="primary" @click="reset">重 置</el-button>
       </div>
     </div>
     <div class="tableBox">
@@ -156,15 +157,15 @@ export default {
         name: v.bname || v.name,
       }));
     });
-    // dvManfProp().then((res) => {
-    //   this.selectData.manfPropName = res.data || [];
-    // });
-    // dvSegment().then((res) => {
-    //   this.selectData.segmentName = res.data || [];
-    // });
-    // dvSegmentFull().then((res) => {
-    //   this.selectData.segmentFullName = res.data || [];
-    // });
+    dvManfProp().then((res) => {
+      this.selectData.manfPropName = res.data || [];
+    });
+    dvSegment().then((res) => {
+      this.selectData.segmentName = res.data || [];
+    });
+    dvSegmentFull().then((res) => {
+      this.selectData.segmentFullName = res.data || [];
+    });
   },
   methods: {
     //查询
@@ -212,15 +213,15 @@ export default {
         subModelName: this.checkedList.includes("sub_model_name")
           ? this.selectValue.subModelName.join()
           : "",
-        // manfPropName: this.checkedList.includes("manfPropName")
-        //   ? this.selectValue.manfPropName.join()
-        //   : "",
-        // segmentName: this.checkedList.includes("segment_name")
-        //   ? this.selectValue.segmentName.join()
-        //   : "",
-        // segmentFullName: this.checkedList.includes("segment_full_name")
-        //   ? this.selectValue.segmentFullName.join()
-        //   : "",
+        manfPropName: this.checkedList.includes("manf_prop_name")
+          ? this.selectValue.manfPropName.join()
+          : "",
+        segmentName: this.checkedList.includes("segment_name")
+          ? this.selectValue.segmentName.join()
+          : "",
+        segmentFullName: this.checkedList.includes("segment_full_name")
+          ? this.selectValue.segmentFullName.join()
+          : "",
       };
       const promise = this.authority ? carStockList(data) : stockList(data);
       promise.then((res) => {
@@ -233,6 +234,18 @@ export default {
       this.queryParams.pageNum = page;
       this.queryParams.pageSize = limit;
       this.salesVolumeList(false);
+    },
+    reset() {
+      this.checkListVbl = checkOptions.map(function (item) {
+        return item.id;
+      });
+      for (let key in this.selectValue) {
+        if (key === "ymId" || key === "yearId") {
+          this.selectValue[key] = [this.endDate, this.endDate];
+        } else {
+          this.selectValue[key] = [];
+        }
+      }
     },
   },
   watch: {

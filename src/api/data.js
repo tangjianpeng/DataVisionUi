@@ -1,14 +1,37 @@
 import request from "@/utils/request";
 
+// 首页数据
+export function dvIndustry() {
+  return request({
+    url: "/dv/industry",
+    method: "post",
+  });
+}
+
 //日历查询
 export function dateRanges(data) {
   return request({
     url: "/dv/dateRange",
     method: "post",
-    data: data,
+    data,
   });
 }
-
+// 获取省份
+export function dvProvince(data) {
+  return request({
+    url: "/dv/province",
+    method: "post",
+    data,
+  });
+}
+// 获取城市
+export function dvCity(data) {
+  return request({
+    url: "/dv/city",
+    method: "post",
+    data,
+  });
+}
 // --获取品牌
 export function dvCarBrand() {
   return request({
@@ -22,7 +45,7 @@ export function dvCarManf(data) {
   return request({
     url: "/dv/carManf",
     method: "post",
-    data: data,
+    data,
   });
 }
 // --获取车型
@@ -30,7 +53,7 @@ export function dvCarSeries(data) {
   return request({
     url: "/dv/carSeries",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -74,39 +97,76 @@ export function dvSegmentFull() {
     data: {},
   });
 }
-
-// 获取省份
-export function dvProvince(data) {
-  return request({
-    url: "/dv/province",
-    method: "post",
-    data: data,
-  });
-}
-
-// 获取城市
-export function dvCity(data) {
-  return request({
-    url: "/dv/city",
-    method: "post",
-    data: data,
-  });
-}
-
-// 获取品牌
-export function commerBrand() {
+// 商用车-品牌
+export function dvCommerBrand() {
   return request({
     url: "/dv/commerBrand",
     method: "post",
     data: {},
   });
 }
-
-// 首页数据
-export function dvIndustry() {
+// 商用车-企业名称
+export function dvOrigEnterpriseName(data) {
   return request({
-    url: "/dv/industry",
+    url: "/dv/commerOrig",
     method: "post",
+    data,
+  });
+}
+// 商用车-车辆型号
+export function dvCommerModel(data) {
+  return request({
+    url: "/dv/commerModel",
+    method: "post",
+    data,
+  });
+}
+// 商用车-底盘企业
+export function dvBaseManf() {
+  return request({
+    url: "/dv/baseManf",
+    method: "post",
+    data: {},
+  });
+}
+// 商用车-底盘型号
+export function dvBase() {
+  return request({
+    url: "/dv/base",
+    method: "post",
+    data: {},
+  });
+}
+// 商用车-燃料
+export function dvCommerFuelType() {
+  return request({
+    url: "/dv/commerFuelType",
+    method: "post",
+    data: {},
+  });
+}
+// 商用车-排量
+export function dvDisplacement() {
+  return request({
+    url: "/dv/displacement",
+    method: "post",
+    data: {},
+  });
+}
+// 商用车-排放标准
+export function dvEmission() {
+  return request({
+    url: "/dv/emission",
+    method: "post",
+    data: {},
+  });
+}
+// 商用车-使用性质
+export function dvUseProp() {
+  return request({
+    url: "/dv/useProp",
+    method: "post",
+    data: {},
   });
 }
 
@@ -115,7 +175,7 @@ export function sendCode(data) {
   return request({
     url: "/dv/sendCode",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -124,7 +184,7 @@ export function dvRegister(data) {
   return request({
     url: "/dv/register",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -133,7 +193,7 @@ export function salesVolumeList(data) {
   return request({
     url: "/car/volumeList",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -142,7 +202,7 @@ export function volumeList(data) {
   return request({
     url: "/dv/volumeList",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -151,7 +211,7 @@ export function energyNewList(data) {
   return request({
     url: "/dv/energyNewList",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -160,7 +220,7 @@ export function carEnergyNewList(data) {
   return request({
     url: "/car/energyNewList",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -169,7 +229,7 @@ export function commerList(data) {
   return request({
     url: "/dv/commerList",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -178,7 +238,7 @@ export function carCommerList(data) {
   return request({
     url: "/car/commerList",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -187,7 +247,7 @@ export function stockList(data) {
   return request({
     url: "/dv/stockList",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -196,7 +256,7 @@ export function carStockList(data) {
   return request({
     url: "/car/stockList",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -205,7 +265,7 @@ export function salesRankList(data) {
   return request({
     url: "/dv/salesRankList",
     method: "post",
-    data: data,
+    data,
   });
 }
 
@@ -222,7 +282,7 @@ export function aliPayPc(data) {
   return request({
     url: "/buy/aliPayPc",
     method: "post",
-    data: data,
+    data,
   });
 }
 

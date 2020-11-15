@@ -25,6 +25,7 @@
       </div>
       <div class="selectionFooter">
         <el-button type="primary" @click="search">查 询</el-button>
+        <el-button type="primary" @click="reset">重 置</el-button>
       </div>
     </div>
     <div class="tableBox">
@@ -226,6 +227,18 @@ export default {
       this.queryParams.pageNum = page;
       this.queryParams.pageSize = limit;
       this.salesVolumeList(false);
+    },
+    reset() {
+      this.checkListVbl = checkOptions.map(function (item) {
+        return item.id;
+      });
+      for (let key in this.selectValue) {
+        if (key === "ymId" || key === "yearId") {
+          this.selectValue[key] = [this.endDate, this.endDate];
+        } else {
+          this.selectValue[key] = [];
+        }
+      }
     },
   },
   watch: {

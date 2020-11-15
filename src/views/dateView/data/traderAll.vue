@@ -25,6 +25,7 @@
       </div>
       <div class="selectionFooter">
         <el-button type="primary" @click="search">查 询</el-button>
+        <el-button type="primary" @click="reset">重 置</el-button>
       </div>
     </div>
     <div class="tableBox">
@@ -55,7 +56,15 @@ import {
   dateRanges,
   dvProvince,
   dvCity,
-  commerBrand,
+  dvCommerBrand,
+  dvOrigEnterpriseName,
+  dvCommerModel,
+  dvBaseManf,
+  dvBase,
+  dvCommerFuelType,
+  dvDisplacement,
+  dvEmission,
+  dvUseProp,
   commerList,
   carCommerList,
 } from "@/api/data";
@@ -141,10 +150,40 @@ export default {
         name,
       }));
     });
-    commerBrand().then((res) => {
+    dvCommerBrand().then((res) => {
       this.selectData.brandName = (res.data || []).map((v) => ({
         name: v.commerBrand || v.name,
       }));
+    });
+    dvBaseManf().then((res) => {
+      this.selectData.baseManfName = (res.data || [])
+        .filter((v) => v)
+        .map(({ name }) => ({ name }));
+    });
+    // dvBase().then((res) => {
+    //   this.selectData.baseName = (res.data || [])
+    //     .filter((v) => v)
+    //     .map(({ name }) => ({ name }));
+    // });
+    dvCommerFuelType().then((res) => {
+      this.selectData.fuelTypeName = (res.data || [])
+        .filter((v) => v)
+        .map(({ name }) => ({ name }));
+    });
+    dvDisplacement().then((res) => {
+      this.selectData.displacement = (res.data || [])
+        .filter((v) => v)
+        .map(({ name }) => ({ name }));
+    });
+    dvEmission().then((res) => {
+      this.selectData.emissionStandards = (res.data || [])
+        .filter((v) => v)
+        .map(({ name }) => ({ name }));
+    });
+    dvUseProp().then((res) => {
+      this.selectData.useProp = (res.data || [])
+        .filter((v) => v)
+        .map(({ name }) => ({ name }));
     });
   },
   methods: {
@@ -160,6 +199,20 @@ export default {
       dvCity({ name }).then((res) => {
         this.selectData.cityName = (res.data || []).map(({ name }) => ({
           name,
+        }));
+      });
+    },
+    dvOrigEnterpriseName(bname = "") {
+      dvOrigEnterpriseName({ bname }).then((res) => {
+        this.selectData.origEnterpriseName = (res.data || []).map((v) => ({
+          name: v.oname || v.name,
+        }));
+      });
+    },
+    dvCommerModel(bname = "", oname = "") {
+      dvCommerModel({ bname, oname }).then((res) => {
+        this.selectData.announceModelCode = (res.data || []).map((v) => ({
+          name: v.model || v.name,
         }));
       });
     },
@@ -182,6 +235,30 @@ export default {
         brandName: this.checkedList.includes("brand_name")
           ? this.selectValue.brandName.join()
           : "",
+        origEnterpriseName: this.checkedList.includes("orig_enterprise_name")
+          ? this.selectValue.origEnterpriseName.join()
+          : "",
+        announceModelCode: this.checkedList.includes("announce_model_code")
+          ? this.selectValue.announceModelCode.join()
+          : "",
+        baseManfName: this.checkedList.includes("base_manf_name")
+          ? this.selectValue.baseManfName.join()
+          : "",
+        // baseName: this.checkedList.includes("base_name")
+        //   ? this.selectValue.baseName.join()
+        //   : "",
+        fuelTypeName: this.checkedList.includes("fuel_type_name")
+          ? this.selectValue.fuelTypeName.join()
+          : "",
+        displacement: this.checkedList.includes("displacement")
+          ? this.selectValue.displacement.join()
+          : "",
+        emissionStandards: this.checkedList.includes("emission_standards")
+          ? this.selectValue.emissionStandards.join()
+          : "",
+        useProp: this.checkedList.includes("use_prop")
+          ? this.selectValue.useProp.join()
+          : "",
       };
       const promise = this.authority ? carCommerList(data) : commerList(data);
       promise.then((res) => {
@@ -195,6 +272,18 @@ export default {
       this.queryParams.pageSize = limit;
       this.salesVolumeList(false);
     },
+    reset() {
+      this.checkListVbl = checkOptions.map(function (item) {
+        return item.id;
+      });
+      for (let key in this.selectValue) {
+        if (key === "ymId" || key === "yearId") {
+          this.selectValue[key] = [this.endDate, this.endDate];
+        } else {
+          this.selectValue[key] = [];
+        }
+      }
+    },
   },
   watch: {
     "selectValue.provinceName": function (data) {
@@ -203,6 +292,25 @@ export default {
         this.dvCity(data.join(","));
       } else {
         this.selectData.cityName = [];
+      }
+    },
+    "selectValue.brandName": function (data) {
+      this.selectValue.origEnterpriseName = [];
+      if (data.length > 0) {
+        this.dvOrigEnterpriseName(data.join(","));
+      } else {
+        this.selectData.origEnterpriseName = [];
+      }
+    },
+    "selectValue.origEnterpriseName": function (data) {
+      this.selectValue.announceModelCode = [];
+      if (
+        this.selectValue.brandName.length > 0 ||
+        this.selectValue.origEnterpriseName.length > 0
+      ) {
+        this.dvCommerModel(selectValue.brandName.join(","), data.join(","));
+      } else {
+        this.selectData.announceModelCode = [];
       }
     },
   },

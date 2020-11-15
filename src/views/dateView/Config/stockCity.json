@@ -60,7 +60,7 @@
     "disabled": false,
     "isCheck": true,
     "isColumn": true,
-    "isSelect--": true
+    "isSelect": true
   },
   {
     "name": "品牌血统",
@@ -87,7 +87,7 @@
     "disabled": false,
     "isCheck": true,
     "isColumn": true,
-    "isSelect--": true
+    "isSelect": true
   },
   {
     "name": "细分市场",
@@ -96,7 +96,7 @@
     "disabled": false,
     "isCheck": true,
     "isColumn": true,
-    "isSelect--": true
+    "isSelect": true
   },
   {
     "width": "100",
