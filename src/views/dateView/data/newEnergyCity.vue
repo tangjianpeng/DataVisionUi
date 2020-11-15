@@ -259,17 +259,18 @@ export default {
     },
     "selectValue.brandName": function (data) {
       this.selectValue.manfName = [];
-      this.selectValue.subModelName = [];
       if (data.length > 0) {
         this.dvCarManf(data.join(","));
       } else {
         this.selectData.manfName = [];
       }
-      this.selectData.subModelName = [];
     },
     "selectValue.manfName": function (data) {
       this.selectValue.subModelName = [];
-      if (data.length > 0) {
+      if (
+        this.selectValue.brandName.length > 0 ||
+        this.selectValue.manfName.length > 0
+      ) {
         this.dvCarSeries(selectValue.brandName.join(","), data.join(","));
       } else {
         this.selectData.subModelName = [];
