@@ -110,7 +110,7 @@
   {
     "id": "vehicle_type",
     "key": "vehicleType",
-    "name": "车量类别",
+    "name": "车辆类别",
     "disabled": false,
     "isCheck": true,
     "isColumn": true,
@@ -119,7 +119,7 @@
   {
     "id": "vehicle_type2",
     "key": "vehicleType2",
-    "name": "车量名称",
+    "name": "车辆名称",
     "disabled": false,
     "isCheck": true,
     "isColumn": true,

@@ -12,6 +12,8 @@
         <el-tab-pane label="数据查询" name="dataQuery"></el-tab-pane>
         <el-tab-pane label="排行榜" name="leaderBoard"></el-tab-pane>
         <el-tab-pane label="仪表盘" name="dashboard"></el-tab-pane>
+        <el-tab-pane label="行业资讯" name="information"></el-tab-pane>
+        <el-tab-pane label="行业报告" name="reports"></el-tab-pane>
         <el-tab-pane label="申请购买" name="buy"></el-tab-pane>
         <el-tab-pane label="关于我们" name="about"></el-tab-pane>
       </el-tabs>
@@ -25,17 +27,9 @@
         trigger="click"
       >
         <div class="avatar-wrapper">
-          <!-- <img :src="avatar" class="user-avatar"> -->
           <span>{{ userName }}</span>
-          <!-- <i class="el-icon-caret-bottom" /> -->
         </div>
         <el-dropdown-menu slot="dropdown">
-          <!--          <router-link to="/user/profile" >-->
-          <!--            <el-dropdown-item >  </el-dropdown-item>-->
-          <!--          </router-link>-->
-          <!--            <el-dropdown-item @click.native="setting = true">-->
-          <!--             <span>布局设置</span>-->
-          <!--           </el-dropdown-item>-->
           <router-link to="/user/personalInfo">
             <el-dropdown-item>个人中心</el-dropdown-item>
           </router-link>
@@ -96,8 +90,8 @@ export default {
   },
   created() {
     document.querySelector("meta[name=viewport]").content =
-      "width=1280px, user-scalable=no";
-    document.body.style.minWidth = "1280px";
+      "width=1440px, user-scalable=no";
+    document.body.style.minWidth = "1440px";
   },
   methods: {
     to(data) {
@@ -106,18 +100,13 @@ export default {
     },
     handleClick(data) {
       if (data.name === "buy") {
-        // if(this.permissions.includes(authority))
-        // this.permissions
         if (this.userName) {
           this.$router.push({ path: "/" + data.name });
           return;
         }
         this.dialogVisible = true;
-
-        // this.activeName = this.dataName;
         return false;
       }
-      // this.dataName = data.name;
       if (data.name === "index_home") {
         this.$router.push({ path: "/index" });
       } else {
@@ -145,15 +134,9 @@ export default {
         if (!val.name) this.show = false;
         if (val.name === "index") {
           if (!this.permissions.includes(authority)) {
-            //console.log(this.permissions.includes(authority))
             this.$router.push({ path: "/index" });
           }
         }
-        // if(val.name != 'index_home' || val.name != 'dataQuery' || val.name != 'about'){
-        //   this.show = false;
-        // }else{
-        //   this.show = true;
-        // }
       },
       // 深度观察监听
       deep: true,

@@ -12,20 +12,22 @@
         <checkbox :options="checkOptions" v-model="checkListVbl" />
       </div>
       <div class="selectionBody">
-        <dataQuerySelect
-          v-for="(item, ndx) in selectOptions"
-          :key="ndx"
-          :beginDate="beginDate"
-          :endDate="endDate"
-          :selectItem="item"
-          :options="selectData[item.key]"
-          v-model="selectValue[item.key]"
-          :disabled="!checkListVbl.includes(item.id)"
-        />
+        <div v-for="(columns, i) in selectOptions" :key="i">
+          <dataQuerySelect
+            v-for="(item, ndx) in columns"
+            :key="ndx"
+            :beginDate="beginDate"
+            :endDate="endDate"
+            :selectItem="item"
+            :options="selectData[item.key]"
+            v-model="selectValue[item.key]"
+            :disabled="!checkListVbl.includes(item.id)"
+          />
+        </div>
       </div>
       <div class="selectionFooter">
-        <el-button type="primary" @click="search">查 询</el-button>
         <el-button type="primary" @click="reset">重 置</el-button>
+        <el-button type="primary" @click="search">查 询</el-button>
       </div>
     </div>
     <div class="tableBox">
@@ -59,6 +61,7 @@ import {
   dvCarSeries,
   dvFuelType,
   dvEngineType,
+  dvManfProp,
   dvSegment,
   dvSegmentFull,
   volumeList,
@@ -75,15 +78,32 @@ const checkListVbl = checkOptions.map(function (item) {
 const columnOptions = dataAll.filter(function (item) {
   return item.isColumn;
 });
-const selectOptions = dataAll.filter(function (item) {
-  return item.isSelect;
-});
 
+const selectOptions = [];
 const selectData = {};
 const selectValue = {};
-selectOptions.map(function (item) {
-  selectData[item.key] = [];
-  selectValue[item.key] = [];
+const isSelectList = dataAll.reduce(function (vs, v) {
+  if (v.isSelect) {
+    vs.push(v);
+  } else if (v.id === "province_name" || v.id === "city_name") {
+    vs.push({});
+  }
+  return vs;
+}, []);
+let i = -1;
+while (++i < isSelectList.length || i % 3 !== 0) {
+  const rows = parseInt(i / 3);
+  const columns = i % 3;
+  if (columns === 0) {
+    selectOptions[rows] = [];
+  }
+  selectOptions[rows].push(i < isSelectList.length ? isSelectList[i] : {});
+}
+dataAll.map(function (item) {
+  if (item.isSelect) {
+    selectData[item.key] = [];
+    selectValue[item.key] = [];
+  }
 });
 
 export default {
@@ -152,6 +172,9 @@ export default {
     dvEngineType().then((res) => {
       this.selectData.engineTypeName = res.data || [];
     });
+    dvManfProp().then((res) => {
+      this.selectData.manfPropName = res.data || [];
+    });
     dvSegment().then((res) => {
       this.selectData.segmentName = res.data || [];
     });
@@ -208,6 +231,9 @@ export default {
           : "",
         engineTypeName: this.checkedList.includes("engine_type_name")
           ? this.selectValue.engineTypeName.join()
+          : "",
+        manfPropName: this.checkedList.includes("manf_prop_name")
+          ? this.selectValue.manfPropName.join()
           : "",
         segmentName: this.checkedList.includes("segment_name")
           ? this.selectValue.segmentName.join()

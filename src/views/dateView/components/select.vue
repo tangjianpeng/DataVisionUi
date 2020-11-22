@@ -1,7 +1,7 @@
 <template>
   <div class="selecItem">
-    <div class="selecItem_l">{{ selectItem.name }}</div>
-    <div class="selecItem_r">
+    <div class="selecItem_l" v-if="selectItem.id">{{ selectItem.name }}</div>
+    <div class="selecItem_r" v-if="selectItem.id">
       <el-date-picker
         v-if="selectItem.name === '年月'"
         :value="valueVbl"
@@ -113,7 +113,7 @@ export default {
 <style scoped>
 .selecItem {
   float: left;
-  width: 50%;
+  width: 33.33%;
   height: 52px;
   display: flex;
   border-top: solid 1px #efefef;

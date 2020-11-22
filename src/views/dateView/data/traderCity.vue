@@ -12,20 +12,22 @@
         <checkbox :options="checkOptions" v-model="checkListVbl" />
       </div>
       <div class="selectionBody">
-        <dataQuerySelect
-          v-for="(item, ndx) in selectOptions"
-          :key="ndx"
-          :beginDate="beginDate"
-          :endDate="endDate"
-          :selectItem="item"
-          :options="selectData[item.key]"
-          v-model="selectValue[item.key]"
-          :disabled="!checkListVbl.includes(item.id)"
-        />
+        <div v-for="(columns, i) in selectOptions" :key="i">
+          <dataQuerySelect
+            v-for="(item, ndx) in columns"
+            :key="ndx"
+            :beginDate="beginDate"
+            :endDate="endDate"
+            :selectItem="item"
+            :options="selectData[item.key]"
+            v-model="selectValue[item.key]"
+            :disabled="!checkListVbl.includes(item.id)"
+          />
+        </div>
       </div>
       <div class="selectionFooter">
-        <el-button type="primary" @click="search">查 询</el-button>
         <el-button type="primary" @click="reset">重 置</el-button>
+        <el-button type="primary" @click="search">查 询</el-button>
       </div>
     </div>
     <div class="tableBox">
@@ -79,15 +81,31 @@ const checkListVbl = checkOptions.map(function (item) {
 const columnOptions = traderCity.filter(function (item) {
   return item.isColumn;
 });
-const selectOptions = traderCity.filter(function (item) {
-  return item.isSelect;
-});
-
+const selectOptions = [];
 const selectData = {};
 const selectValue = {};
-selectOptions.map(function (item) {
-  selectData[item.key] = [];
-  selectValue[item.key] = [];
+const isSelectList = traderCity.reduce(function (vs, v) {
+  if (v.isSelect) {
+    vs.push(v);
+  } else if (v.id === "province_name" || v.id === "city_name") {
+    vs.push({});
+  }
+  return vs;
+}, []);
+let i = -1;
+while (++i < isSelectList.length || i % 3 !== 0) {
+  const rows = parseInt(i / 3);
+  const columns = i % 3;
+  if (columns === 0) {
+    selectOptions[rows] = [];
+  }
+  selectOptions[rows].push(i < isSelectList.length ? isSelectList[i] : {});
+}
+traderCity.map(function (item) {
+  if (item.isSelect) {
+    selectData[item.key] = [];
+    selectValue[item.key] = [];
+  }
 });
 
 export default {

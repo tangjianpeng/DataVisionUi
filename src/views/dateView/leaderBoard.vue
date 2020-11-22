@@ -2,38 +2,35 @@
   <div class="center">
     <div class="center_l">
       <div class="itemBox_">
-        <span class="sp" @click="onClickData = 'car1'" :class="color('car1')"
+        <span class="sp" @click="tabId = 'car1'" :class="color('car1')"
           >汽车销量排行榜</span
         >
-        <p @click="onClickData = 'car2'" :class="color('car2')">
+        <p @click="tabId = 'car2'" :class="color('car2')">
           轿车销量排行榜
         </p>
-        <p @click="onClickData = 'car3'" :class="color('car3')">
+        <p @click="tabId = 'car3'" :class="color('car3')">
           SUV销量排行榜
         </p>
-        <p @click="onClickData = 'car4'" :class="color('car4')">
+        <p @click="tabId = 'car4'" :class="color('car4')">
           MPV销量排行榜
         </p>
       </div>
       <div class="itemBox_">
-        <span
-          class="sp"
-          @click="onClickData = 'energy1'"
-          :class="color('energy1')"
+        <span class="sp" @click="tabId = 'energy1'" :class="color('energy1')"
           >新能源销量排行榜</span
         >
-        <p @click="onClickData = 'energy2'" :class="color('energy2')">
+        <p @click="tabId = 'energy2'" :class="color('energy2')">
           新能源轿车销量排行榜
         </p>
-        <p @click="onClickData = 'energy3'" :class="color('energy3')">
+        <p @click="tabId = 'energy3'" :class="color('energy3')">
           新能源SUV销量排行榜
         </p>
-        <p @click="onClickData = 'energy4'" :class="color('energy4')">
+        <p @click="tabId = 'energy4'" :class="color('energy4')">
           新能源MPV销量排行榜
         </p>
       </div>
       <div class="itemBox_">
-        <span class="sp" @click="onClickData = 'stock'" :class="color('stock')"
+        <span class="sp" @click="tabId = 'stock'" :class="color('stock')"
           >汽车保有量排行榜</span
         >
       </div>
@@ -46,7 +43,6 @@
 
 <script>
 import { dvIndustry } from "@/api/data";
-import dataVal from "../../store/dataVal";
 import car from "@/components/dataVision/leaderBoard/car";
 export default {
   name: "leaderBoard",
@@ -55,9 +51,8 @@ export default {
   },
   data() {
     return {
-      onClickData: "car1",
       authority: false, //权限
-      dataVal,
+      tabId: "car1",
       timeData: "",
       stockTime: "",
     };
@@ -80,20 +75,22 @@ export default {
         if (data.length > 0) {
           this.timeData = data[3].dateName;
           this.stockTime = data[4].dateName;
-          this.$refs.car.init(this.onClickData);
+          this.$refs.car.init(this.tabId);
         }
       });
     },
   },
   watch: {
-    onClickData(data) {
-      this.$refs.car.init(data);
+    tabId(data) {
+      if (this.timeData && this.stockTime) {
+        this.$refs.car.init(data);
+      }
     },
   },
   computed: {
     color: function (data) {
       return function (data) {
-        if (this.onClickData === data) return "color_";
+        if (this.tabId === data) return "color_";
         return "";
       };
     },
