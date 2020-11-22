@@ -81,7 +81,7 @@ const columnOptions = dataAll.filter(function (item) {
 const selectOptions = [];
 const selectData = {};
 const selectValue = {};
-const isSelectList = dataProvince.reduce(function (vs, v) {
+const isSelectList = dataAll.reduce(function (vs, v) {
   if (v.isSelect) {
     vs.push(v);
   } else if (v.id === "province_name" || v.id === "city_name") {
@@ -98,7 +98,7 @@ while (++i < isSelectList.length || i % 3 !== 0) {
   }
   selectOptions[rows].push(i < isSelectList.length ? isSelectList[i] : {});
 }
-dataProvince.map(function (item) {
+dataAll.map(function (item) {
   if (item.isSelect) {
     selectData[item.key] = [];
     selectValue[item.key] = [];
