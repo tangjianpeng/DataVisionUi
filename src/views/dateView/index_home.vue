@@ -34,24 +34,24 @@
               </div>
               <div class="flex_">
                 <span>
-                  {{
-                  type2.yearOnYear ? `${type2.yearOnYear}%` : ""
-                  }}
+                  {{ type2.yearOnYear ? `${type2.yearOnYear}%` : "" }}
                 </span>
                 <p>{{ type2.yearOnYear ? `同比` : "" }}</p>
               </div>
               <div class="flex_">
                 <span>
-                  {{
-                  type2.monthOnMonth ? `${type2.monthOnMonth}%` : ""
-                  }}
+                  {{ type2.monthOnMonth ? `${type2.monthOnMonth}%` : "" }}
                 </span>
                 <p>{{ type2.monthOnMonth ? `环比` : "" }}</p>
               </div>
             </div>
             <img src="@/assets/image/v1.jpg" alt />
           </div>
-          <span class="btn" @click="$router.push({ path: '/dashboard', query: { item: '1' } })">查看详情</span>
+          <span
+            class="btn"
+            @click="$router.push({ path: '/dashboard', query: { item: '1' } })"
+            >查看详情</span
+          >
         </div>
         <div class="echarts_item">
           <p class="p">城市汽车销量数据</p>
@@ -65,7 +65,11 @@
             </div>
             <img src="@/assets/image/v2.jpg" alt />
           </div>
-          <span class="btn" @click="$router.push({ path: '/dashboard', query: { item: '2' } })">查看详情</span>
+          <span
+            class="btn"
+            @click="$router.push({ path: '/dashboard', query: { item: '2' } })"
+            >查看详情</span
+          >
         </div>
         <div class="echarts_item">
           <p class="p">汽车保有量数据</p>
@@ -73,38 +77,66 @@
             <div class="text_t_flex">
               <div class="flex_">
                 <span>{{ type3.industryQty }}</span>
-                <p v-show="type3.dateName">全国狭义乘用车保有量{{ type3.dateName }}</p>
+                <p v-show="type3.dateName">
+                  全国狭义乘用车保有量{{ type3.dateName }}
+                </p>
               </div>
             </div>
             <img src="@/assets/image/v3.jpg" alt />
           </div>
-          <span class="btn" @click="$router.push({ path: '/dashboard', query: { item: '3' } })">查看详情</span>
+          <span
+            class="btn"
+            @click="$router.push({ path: '/dashboard', query: { item: '3' } })"
+            >查看详情</span
+          >
         </div>
       </div>
       <div :class="isMobile ? 'item_box_mobile' : 'item_box_pc'">
         <div class="item_list">
           <img src="@/assets/image/cyc.jpg" alt />
           <span class="title_">乘用车销量</span>
-          <p class="text_">采用上险口径统计，覆盖全国、省份、城市维度，细分至品牌、车型、排挡、排量、燃料类型、细分市场等字段，每月15日左右更新</p>
-          <span class="a" @click="$router.push({ path: '/dataQuery' })">查看</span>
+          <p class="text_">
+            采用上险口径统计，覆盖全国、省份、城市维度，细分至品牌、车型、排挡、排量、燃料类型、细分市场等字段，每月15日左右更新
+          </p>
+          <span class="a" @click="$router.push({ path: '/dataQuery' })"
+            >查看</span
+          >
         </div>
         <div class="item_list">
           <img src="@/assets/image/xny.jpg" alt />
           <span class="title_">新能源销量</span>
-          <p class="text_">采用上险口径统计，覆盖全国、省份、城市维度，细分至品牌、车型、排挡、排量、燃料类型、细分市场等字段，每月15日左右更新</p>
-          <span class="a" @click="$router.push({ path: '/dataQuery', query: { item: '1' } })">查看</span>
+          <p class="text_">
+            采用上险口径统计，覆盖全国、省份、城市维度，细分至品牌、车型、排挡、排量、燃料类型、细分市场等字段，每月15日左右更新
+          </p>
+          <span
+            class="a"
+            @click="$router.push({ path: '/dataQuery', query: { item: '1' } })"
+            >查看</span
+          >
         </div>
         <div class="item_list">
           <img src="@/assets/image/syc.jpg" alt />
           <span class="title_">商用车销量</span>
-          <p class="text_">商用车销量覆盖全国、省份、城市维度，细分至车辆型号、品牌、底盘型号、发动机型号、排量、使用性质等字段，每月15日左右更新</p>
-          <span class="a" @click="$router.push({ path: '/dataQuery', query: { item: '2' } })">查看</span>
+          <p class="text_">
+            商用车销量覆盖全国、省份、城市维度，细分至车辆型号、品牌、底盘型号、发动机型号、排量、使用性质等字段，每月15日左右更新
+          </p>
+          <span
+            class="a"
+            @click="$router.push({ path: '/dataQuery', query: { item: '2' } })"
+            >查看</span
+          >
         </div>
         <div class="item_list">
           <img src="@/assets/image/byl.jpg" alt />
           <span class="title_">汽车保有量</span>
-          <p class="text_">根据统计多年的上险数统计分析得到细分至车型的城市保有量数据，每年1月份左右更新</p>
-          <span class="a" @click="$router.push({ path: '/dataQuery', query: { item: '3' } })">查看</span>
+          <p class="text_">
+            根据统计多年的上险数统计分析得到细分至车型的城市保有量数据，每年1月份左右更新
+          </p>
+          <span
+            class="a"
+            @click="$router.push({ path: '/dataQuery', query: { item: '3' } })"
+            >查看</span
+          >
         </div>
       </div>
     </div>
@@ -127,7 +159,7 @@ const isMobile =
 export default {
   name: "",
   components: {
-    foot
+    foot,
   },
   data() {
     return {
@@ -135,7 +167,7 @@ export default {
       type1: {},
       type2: {},
       type3: {},
-      isMobile
+      isMobile,
     };
   },
   mounted() {
@@ -148,19 +180,19 @@ export default {
       new Swiper(".swiper-container", {
         autoplay: 3000,
         loop: true,
-        pagination: ".swiper-pagination"
+        pagination: ".swiper-pagination",
       });
     },
     // 获取数据
     dvIndustry() {
-      dvIndustry().then(res => {
+      dvIndustry().then((res) => {
         let data = res.data || [];
         this.type1 = data[0] || {};
         this.type2 = data[1] || {};
         this.type3 = data[2] || {};
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

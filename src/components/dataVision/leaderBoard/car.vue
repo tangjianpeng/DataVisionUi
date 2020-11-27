@@ -45,13 +45,12 @@
           :name="item.name"
         ></el-tab-pane>
       </el-tabs>
-      <carData
-        ref="carData"
+      <carTable
         :loading="loading"
         :sourceType="sourceType"
         :tableType="tableType"
         :tableData="tableData"
-      ></carData>
+      ></carTable>
     </div>
   </div>
 </template>
@@ -59,7 +58,7 @@
 <script>
 import { dvIndustry, salesRankList } from "@/api/data";
 import dataVal from "../../../store/dataVal";
-import carData from "@/components/dataVision/table/car";
+import carTable from "./carTable";
 export default {
   name: "car",
   data() {
@@ -77,7 +76,7 @@ export default {
   },
   props: ["timeData", "stockTime"],
   components: {
-    carData,
+    carTable,
   },
   methods: {
     init(tabId) {

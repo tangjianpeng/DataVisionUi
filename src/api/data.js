@@ -288,7 +288,7 @@ export function aliPayPc(data) {
 
 //仪表盘
 
-//右边的数据分析
+// 累计销量
 export function salesRatio(query) {
   return request({
     url: "/charts/salesRatio",
@@ -297,8 +297,7 @@ export function salesRatio(query) {
   });
 }
 
-//销量走势图
-
+// 销量走势图
 export function carSales(query) {
   return request({
     url: "/charts/carSales",
@@ -307,7 +306,7 @@ export function carSales(query) {
   });
 }
 
-//厂商排行 和 车型排行 分析
+// 厂商排行 和 车型排行 分析
 export function ranking(query) {
   return request({
     url: "/charts/ranking",

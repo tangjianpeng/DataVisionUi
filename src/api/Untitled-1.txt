@@ -1,0 +1,151 @@
+全国
+    柱图
+    燃料类型 + 车身形式占比
+
+省份
+    品牌TOP + 车系TOP
+    燃料类型 + 车身形式占比
+城市
+    品牌TOP + 车系TOP
+    燃料类型 + 车身形式占比
+
+保有量
+    品牌TOP + 车系TOP
+    厂商属性 + 车身形式占比
+
+
+省份销量：
+城市销量：
+
+品牌销量：
+厂商销量：
+
+燃油类型：
+厂商属性：
+
+汽车类型：
+车型销量：
+
+
+
+    <!-- 全国 -->
+    <div class="top_box" v-show="allList.includes(this.tabId)">
+      <!-- <dataEcharts
+        ref="dataEcharts"
+        :timeData="timeData"
+        :stockTime="stockTime"
+      ></dataEcharts> -->
+    </div>
+    <!-- 省份.城市 -->
+    <div class="dataTable" v-show="!allList.includes(this.tabId)">
+      <el-select
+        v-model="selectName"
+        filterable
+        placeholder="请选择"
+        @change="selectClick"
+      >
+        <el-option
+          v-for="(item, index) in selectOptions"
+          :key="index"
+          :label="item.name"
+          :value="item.name"
+        >
+        </el-option>
+      </el-select>
+      <div class="dataList">
+        <div class="list_item" v-for="(item, index) in dataAll" :key="index">
+          <span class="title">{{ item.text }}</span>
+          <p class="number">{{ toLocaleString(item.salesQtyTotal) }}</p>
+          <span v-show="item.morMonth">环比增速 </span>
+          <span v-show="item.morMonth">{{ item.morMonth }}</span>
+          <span v-show="item.yorYear">同比增速 </span>
+          <span v-show="item.yorYear">{{ item.yorYear }}</span>
+          <span v-show="item.yorYearTotal">年累计同比 </span>
+          <span v-show="item.yorYearTotal">{{ item.yorYearTotal }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- table 表格 -->
+    <div class="table_box" v-show="false">
+      <p>
+        {{ stockList.includes(tabId) ? `${stockTime}年` : data_t.text }}厂商排名
+      </p>
+      <el-table
+        :data="tableData_mn"
+        height="500px"
+        border
+        v-loading="loading2"
+        style="width: 100%;"
+      >
+        <el-table-column type="index" label="排名" width="100">
+        </el-table-column>
+
+        <el-table-column prop="manfName" label="厂商"> </el-table-column>
+        <el-table-column prop="salesQty" label="销量（辆）"> </el-table-column>
+        <el-table-column
+          prop="morMonth"
+          label="环比增速"
+          v-if="!stockList.includes(tabId)"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="yorYear"
+          label="年累计同比"
+          v-if="stockList.includes(tabId)"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="yorYear"
+          label="同比增速"
+          v-if="!stockList.includes(tabId)"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="totalShare"
+          label="年累计份额"
+          v-if="!stockList.includes(tabId)"
+        >
+        </el-table-column>
+      </el-table>
+
+      <p>
+        {{ stockList.includes(tabId) ? `${stockTime}年` : data_t.text }}车型排名
+      </p>
+      <el-table
+        :data="tableData_sn"
+        height="500px"
+        border
+        v-loading="loading1"
+        style="width: 100%;"
+      >
+        <el-table-column type="index" label="排名" width="100">
+        </el-table-column>
+
+        <el-table-column prop="subModelName" label="车型"> </el-table-column>
+        <el-table-column prop="salesQty" label="销量（辆）"> </el-table-column>
+        <el-table-column
+          prop="morMonth"
+          label="环比增速"
+          v-if="!stockList.includes(tabId)"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="yorYear"
+          label="年累计同比"
+          v-if="stockList.includes(tabId)"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="yorYear"
+          label="同比增速"
+          v-if="!stockList.includes(tabId)"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="totalShare"
+          label="年累计份额"
+          v-if="!stockList.includes(tabId)"
+        >
+        </el-table-column>
+      </el-table>
+    </div>
