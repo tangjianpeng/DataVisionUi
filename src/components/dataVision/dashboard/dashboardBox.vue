@@ -258,6 +258,7 @@ export default {
     carSales() {
       carSales(this.requestParams).then((res) => {
         this.initChartsBar({
+          isRotate: false,
           id: "bar",
           title: res.data ? res.data.text : "",
           data: res.data ? Object.keys(res.data.salesQtyMap || {}) : [],
@@ -274,29 +275,23 @@ export default {
     // 品牌销量
     chartsBrand() {
       chartsBrand(this.requestParams).then((res) => {
-        let data = res.data ? res.data.map((v) => v.brandName) : [];
-        if (data.length > 5) {
-          data = data.map((v, i) => `${i & 1 ? "\n" : ""}${v}`);
-        }
         this.initChartsBar({
+          isRotate: true,
           id: "bar1",
           title: "品牌TOP10",
-          data,
+          data: res.data ? res.data.map((v) => v.brandName) : [],
           seriesData: res.data ? res.data.map((v) => v.salesQty) : [],
         });
       });
     },
     // 汽车类型
-    chartsSegment() {
-      chartsSegment(this.requestParams).then((res) => {
-        let data = res.data ? res.data.map((v) => v.segmentName) : [];
-        if (data.length > 5) {
-          data = data.map((v, i) => `${i & 1 ? "\n" : ""}${v}`);
-        }
+    chartsSubModel() {
+      chartsSubModel(this.requestParams).then((res) => {
         this.initChartsBar({
+          isRotate: true,
           id: "bar2",
           title: "车型TOP10",
-          data,
+          data: res.data ? res.data.map((v) => v.subModelName) : [],
           seriesData: res.data ? res.data.map((v) => v.salesQty) : [],
         });
       });
@@ -332,22 +327,22 @@ export default {
       });
     },
     // 车型销量 => 车身形式
-    chartsSubModel() {
-      chartsSubModel(this.requestParams).then((res) => {
+    chartsSegment() {
+      chartsSegment(this.requestParams).then((res) => {
         this.initChartsPie({
           id: "pie2",
           title: "车身形式占比",
           data: res.data
             ? res.data.map((v) => ({
                 value: v.salesQty,
-                name: v.subModelName,
+                name: v.segmentName,
               }))
             : [],
         });
       });
     },
     // 柱状图
-    initChartsBar({ id, title, data, seriesData }) {
+    initChartsBar({ isRotate, id, title, data, seriesData }) {
       const chart = echarts.init(document.getElementById(id), "macarons");
       if (!chart) return;
       this.$nextTick(() => {
@@ -394,8 +389,9 @@ export default {
               },
               axisLabel: {
                 show: true,
-                rotate: 0,
-                fontSize: 10,
+                interval: 0,
+                rotate: isRotate ? -45 : 0,
+                fontSize: 12,
                 color: "#3A3A3C",
               },
               splitLine: {
