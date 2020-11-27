@@ -346,113 +346,115 @@ export default {
       const chart = echarts.init(document.getElementById(id), "macarons");
       if (!chart) return;
       this.$nextTick(() => {
-        chart.setOption({
-          title: {
-            text: title || "",
-          },
-          grid: [
-            {
-              top: 80,
+        setTimeout(() => {
+          chart.setOption({
+            title: {
+              text: title || "",
             },
-          ],
-          toolbox: {
-            feature: {
-              dataView: { show: true, readOnly: false },
-              restore: { show: true },
-              saveAsImage: { show: true },
-            },
-          },
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              show: true,
-              status: "shadow",
-              z: -1,
-              shadowStyle: {
-                color: "#E6F7FF",
+            grid: [
+              {
+                top: 80,
               },
-              type: "shadow",
+            ],
+            toolbox: {
+              feature: {
+                dataView: { show: true, readOnly: false },
+                restore: { show: true },
+                saveAsImage: { show: true },
+              },
             },
-          },
-          xAxis: [
-            {
-              position: "bottom",
-              type: "category",
-              axisLine: {
+            tooltip: {
+              trigger: "axis",
+              axisPointer: {
                 show: true,
-                lineStyle: {
-                  color: "#ECF1F6",
+                status: "shadow",
+                z: -1,
+                shadowStyle: {
+                  color: "#E6F7FF",
                 },
+                type: "shadow",
               },
-              axisTick: {
-                show: false,
-              },
-              axisLabel: {
-                show: true,
-                interval: 0,
-                rotate: isRotate ? -45 : 0,
-                fontSize: 12,
-                color: "#3A3A3C",
-              },
-              splitLine: {
-                show: true,
-                lineStyle: {
-                  color: ["#ECF1F6", "#ECF1F6"],
-                  width: 0,
-                  type: "dashed",
+            },
+            xAxis: [
+              {
+                position: "bottom",
+                type: "category",
+                axisLine: {
+                  show: true,
+                  lineStyle: {
+                    color: "#ECF1F6",
+                  },
                 },
-              },
-              gridIndex: 0,
+                axisTick: {
+                  show: false,
+                },
+                axisLabel: {
+                  show: true,
+                  interval: 0,
+                  rotate: isRotate ? -45 : 0,
+                  fontSize: 12,
+                  color: "#3A3A3C",
+                },
+                splitLine: {
+                  show: true,
+                  lineStyle: {
+                    color: ["#ECF1F6", "#ECF1F6"],
+                    width: 0,
+                    type: "dashed",
+                  },
+                },
+                gridIndex: 0,
 
-              data: data,
-            },
-          ],
-          yAxis: [
-            {
-              type: "value",
-              name: "单位（辆）",
-              position: "left",
-              axisLine: {
-                show: false,
+                data: data,
               },
-              axisTick: {
-                show: false,
-              },
-              axisLabel: {
-                show: true,
-                rotate: 0,
-                fontSize: 12,
-                color: "#6E7D9C",
-              },
-              splitLine: {
-                show: true,
-                lineStyle: {
-                  color: "#ECF1F6",
-                  width: 1,
-                  type: "solid",
+            ],
+            yAxis: [
+              {
+                type: "value",
+                name: "单位（辆）",
+                position: "left",
+                axisLine: {
+                  show: false,
                 },
+                axisTick: {
+                  show: false,
+                },
+                axisLabel: {
+                  show: true,
+                  rotate: 0,
+                  fontSize: 12,
+                  color: "#6E7D9C",
+                },
+                splitLine: {
+                  show: true,
+                  lineStyle: {
+                    color: "#ECF1F6",
+                    width: 1,
+                    type: "solid",
+                  },
+                },
+                min: 0,
+                gridIndex: 0,
+                boundaryGap: ["10%", "10%"],
               },
-              min: 0,
-              gridIndex: 0,
-              boundaryGap: ["10%", "10%"],
-            },
-          ],
-          series: [
-            {
-              xAxisIndex: 0,
-              yAxisIndex: 0,
-              itemStyle: {
-                color: "#43A7FF",
+            ],
+            series: [
+              {
+                xAxisIndex: 0,
+                yAxisIndex: 0,
+                itemStyle: {
+                  color: "#43A7FF",
+                },
+                barMaxWidth: 20,
+                z: 3,
+                name: "单位（辆）",
+                type: "bar",
+                data: seriesData,
+                barWidth: "12%",
               },
-              barMaxWidth: 20,
-              z: 3,
-              name: "单位（辆）",
-              type: "bar",
-              data: seriesData,
-              barWidth: "12%",
-            },
-          ],
-        });
+            ],
+          });
+        }, 100);
       });
     },
     // 饼图
@@ -708,6 +710,7 @@ export default {
   flex: 1;
   margin: 0 10px;
   padding: 10px;
+  width: 100%;
   height: 300px;
   background: #fff;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12),
