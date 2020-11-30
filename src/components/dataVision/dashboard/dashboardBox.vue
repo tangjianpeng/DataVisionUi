@@ -1,23 +1,60 @@
 <template>
   <div class="center_box">
-    <div class="dataTable" v-show="!isCountry">
-      <div class="dataBtn">
-        <el-select
-          v-model="selectName"
-          filterable
-          placeholder="请选择"
-          @change="selectClick"
-          v-show="!isCountry"
+    <div class="date_type">
+      <el-radio-group
+        v-model="dateType"
+        v-if="!isStock"
+        @change="dateTypeChange"
+      >
+        <el-radio label="1">按年</el-radio>
+        <el-radio label="2">按月</el-radio>
+      </el-radio-group>
+      <el-select
+        v-show="isProvince || isCity"
+        v-model="placeVal"
+        filterable
+        placeholder="请选择"
+        :style="`margin-left: ${
+          isCountry ? 0 : 220
+        }px; margin-right: 50px; width: 200px;`"
+      >
+        <el-option
+          v-for="(item, index) in selectOptions"
+          :key="index"
+          :label="item.name"
+          :value="item.value"
         >
-          <el-option
-            v-for="(item, index) in selectOptions"
-            :key="index"
-            :label="item.name"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </div>
+        </el-option>
+      </el-select>
+      <el-button
+        type="primary"
+        @click="reset"
+        :style="`margin-left: ${isCountry ? 250 : 0}px;`"
+        >重 置</el-button
+      >
+      <el-button type="primary" @click="confirm">查 询</el-button>
+    </div>
+    <div :class="isStock ? 'date_picker_2' : 'date_picker'">
+      <el-date-picker
+        v-if="dateType == '1'"
+        v-model="dateVbl"
+        type="year"
+        value-format="yyyy"
+        style="width: 200px;"
+        placeholder="选择时间"
+        :clearable="false"
+      >
+      </el-date-picker>
+      <el-date-picker
+        v-if="dateType == '2'"
+        v-model="dateVbl"
+        type="month"
+        value-format="yyyy-MM"
+        style="width: 200px;"
+        placeholder="选择时间"
+        :clearable="false"
+      >
+      </el-date-picker>
     </div>
     <!-- top 累计销量数据 -->
     <div class="dataList">
@@ -50,11 +87,11 @@
     <div class="echart" v-show="isCountry">
       <div class="left" id="bar"></div>
     </div>
-    <div class="echart-box">
-      <div class="echart-item" v-show="!isCountry">
+    <div class="echart-box" v-show="!isCountry">
+      <div class="echart-item">
         <div id="bar1"></div>
       </div>
-      <div class="echart-item" v-show="!isCountry">
+      <div class="echart-item">
         <div id="bar2"></div>
       </div>
     </div>
@@ -115,6 +152,8 @@ export default {
       },
 
       dateType: "2",
+      dateVbl: "",
+
       provinceDataSlt: [
         {
           value: "-1",
@@ -127,8 +166,7 @@ export default {
           name: "所有城市",
         },
       ],
-
-      selectName: "-1",
+      placeVal: "-1",
 
       salesData: [],
 
@@ -153,7 +191,12 @@ export default {
   mounted() {
     //省份
     dvProvince({ type: "0" }).then((res) => {
-      this.provinceDataSlt = this.provinceDataSlt.concat(
+      this.provinceDataSlt = [
+        {
+          value: "-1",
+          name: "所有省份",
+        },
+      ].concat(
         (res.data || []).map((v) => ({
           value: v.name,
           name: v.name,
@@ -162,7 +205,12 @@ export default {
     });
     //城市
     dvCity({ type: "0" }).then((res) => {
-      this.cityDataSlt = this.cityDataSlt.concat(
+      this.cityDataSlt = [
+        {
+          value: "-1",
+          name: "所有城市",
+        },
+      ].concat(
         (res.data || []).map((v) => ({
           value: v.name,
           name: v.name,
@@ -196,9 +244,7 @@ export default {
       }
     },
     beginDate() {
-      return ["ownership_2", "ownership_3", "ownership_4"].includes(this.tabId)
-        ? this.stockTime
-        : this.timeData;
+      return this.isStock ? this.stockTime : this.timeData;
     },
     isCountry() {
       return ["car2", "energy2", "ownership_2"].includes(this.tabId);
@@ -208,6 +254,9 @@ export default {
     },
     isCity() {
       return ["car4", "energy4", "ownership_4"].includes(this.tabId);
+    },
+    isStock() {
+      return this.sourceType === "3";
     },
     selectOptions() {
       if (this.isProvince) {
@@ -221,31 +270,49 @@ export default {
     requestParams() {
       return {
         sourceType: this.sourceType,
-        dateType: this.sourceType === "3" ? "1" : this.dateType,
-        beginDate: this.beginDate,
+        dateType: this.dateType,
+        beginDate: this.dateVbl,
         provinceName:
-          this.isProvince && this.selectName !== "-1" ? this.selectName : "",
-        cityName:
-          this.isCity && this.selectName !== "-1" ? this.selectName : "",
+          this.isProvince && this.placeVal !== "-1" ? this.placeVal : "",
+        cityName: this.isCity && this.placeVal !== "-1" ? this.placeVal : "",
       };
     },
   },
   methods: {
     init() {
-      this.selectName = "-1";
-      this.getData();
+      // this.placeVal = "-1";
+      // this.getData();
+      this.reset();
+      this.confirm();
     },
-    selectClick() {
+    dateTypeChange(val) {
+      if (val === "1") {
+        this.dateVbl = this.stockTime;
+      } else {
+        this.dateVbl = this.timeData;
+      }
+    },
+    reset() {
+      if (this.isStock) {
+        this.dateType = "1";
+        this.dateVbl = this.stockTime;
+      } else {
+        this.dateType = "2";
+        this.dateVbl = this.timeData;
+      }
+      this.placeVal = "-1";
+    },
+    confirm() {
       this.getData();
     },
     getData() {
       this.salesRatio();
       this.isCountry && this.carSales();
       !this.isCountry && this.chartsBrand();
-      !this.isCountry && this.chartsSegment();
-      this.sourceType !== "3" && this.chartsFuelType();
-      this.sourceType === "3" && this.chartsManfProp();
-      this.chartsSubModel();
+      !this.isCountry && this.chartsSubModel();
+      !this.isStock && this.chartsFuelType();
+      this.isStock && this.chartsManfProp();
+      this.chartsSegment();
     },
     // 月和累计量
     salesRatio() {
@@ -272,7 +339,7 @@ export default {
     chartsProvince() {},
     // 城市销量
     chartsCity() {},
-    // 品牌销量
+    // 品牌TOP10
     chartsBrand() {
       chartsBrand(this.requestParams).then((res) => {
         this.initChartsBar({
@@ -284,7 +351,7 @@ export default {
         });
       });
     },
-    // 汽车类型
+    // 车系TOP10
     chartsSubModel() {
       chartsSubModel(this.requestParams).then((res) => {
         this.initChartsBar({
@@ -326,7 +393,7 @@ export default {
         });
       });
     },
-    // 车型销量 => 车身形式
+    // 车身形式
     chartsSegment() {
       chartsSegment(this.requestParams).then((res) => {
         this.initChartsPie({
@@ -565,40 +632,41 @@ export default {
 
 <style scoped>
 .center_box {
+  position: relative;
   width: 100%;
   height: 100%;
 }
-.top_box {
-  width: 100%;
+.date_type {
+  height: 60px;
+  margin-bottom: 10px;
+  padding: 12px 10px 0;
+  background: #fff;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12),
+    0px 0px 6px 0px rgba(0, 0, 0, 0.04);
 }
-.table_box {
-  width: 100%;
+.date_type >>> .el-radio-group {
+  vertical-align: top;
+  margin-top: 10px;
+  margin-right: 24px;
+}
+.date_type >>> .el-radio {
+  margin-right: 12px;
+}
+.date_picker {
+  position: absolute;
+  top: 12px;
+  left: 160px;
+  z-index: 100;
+}
+.date_picker_2 {
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  z-index: 100;
 }
 .dataBtn {
-  padding: 10px 0;
+  padding-bottom: 10px;
 }
-.dataTable >>> .el-tabs__header {
-  float: left;
-  margin-right: 20px;
-}
-.list_item {
-  width: 50%;
-  height: 100%;
-  padding: 20px 20px;
-}
-.number {
-  font-size: 38px;
-}
-.green {
-  color: #24a2a1 !important;
-  margin: 0 20px;
-}
-.red {
-  color: red !important;
-  margin: 0 20px;
-}
-
-/* ------------------------------- */
 .dataEcharts {
   width: 100%;
 }
@@ -619,7 +687,6 @@ export default {
   padding-top: 10px;
   padding-left: 10px;
   font-size: 16px;
-  /* border: solid 1px #889AA7; */
 }
 .top_t {
   width: 100%;
@@ -659,6 +726,7 @@ export default {
 }
 .list_item {
   flex: 1;
+  width: 50%;
   height: 100%;
   margin: 0 10px;
   padding: 20px 0;
@@ -699,29 +767,28 @@ export default {
 .echart {
   margin-bottom: 12px;
   padding: 10px;
+  height: 300px;
   background: #fff;
 }
 .echart-box {
-  display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
 }
 .echart-item {
-  position: relative;
-  flex: 1;
-  margin: 0 10px;
+  float: left;
+  width: calc(50% - 10px);
   padding: 10px;
-  width: 100%;
   height: 300px;
   background: #fff;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12),
     0px 0px 6px 0px rgba(0, 0, 0, 0.04);
 }
-.echart-item:first-child {
-  margin-left: 0px;
-}
 .echart-item:last-child {
-  margin-right: 0px;
+  float: right;
 }
+#bar,
 #bar1,
 #bar2,
 #pie1,
