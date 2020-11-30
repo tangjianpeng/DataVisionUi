@@ -26,8 +26,12 @@
         </div>
       </div>
       <div class="selectionFooter">
-        <el-button type="primary" @click="reset">重 置</el-button>
-        <el-button type="primary" @click="search">查 询</el-button>
+        <el-button type="primary" icon="el-icon-refresh-right" @click="reset">
+          重 置
+        </el-button>
+        <el-button type="primary" icon="el-icon-search" @click="search">
+          查 询
+        </el-button>
       </div>
     </div>
     <div class="tableBox">
