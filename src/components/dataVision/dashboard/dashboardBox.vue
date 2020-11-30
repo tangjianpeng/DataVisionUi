@@ -16,7 +16,7 @@
         placeholder="请选择"
         :style="`margin-left: ${
           isCountry ? 0 : 220
-        }px; margin-right: 50px; width: 200px;`"
+        }px; margin-right: 30px; width: 200px;`"
       >
         <el-option
           v-for="(item, index) in selectOptions"
@@ -28,11 +28,15 @@
       </el-select>
       <el-button
         type="primary"
+        icon="el-icon-refresh-right"
         @click="reset"
-        :style="`margin-left: ${isCountry ? 250 : 0}px;`"
-        >重 置</el-button
+        :style="`margin-left: ${isCountry ? 240 : 0}px;`"
       >
-      <el-button type="primary" @click="confirm">查 询</el-button>
+        重 置
+      </el-button>
+      <el-button type="primary" icon="el-icon-search" @click="confirm">
+        查 询
+      </el-button>
     </div>
     <div :class="isStock ? 'date_picker_2' : 'date_picker'">
       <el-date-picker
@@ -368,7 +372,7 @@ export default {
       chartsFuelType(this.requestParams).then((res) => {
         this.initChartsPie({
           id: "pie1",
-          title: "新能源占比",
+          title: "燃料类型",
           data: res.data
             ? res.data.map((v) => ({
                 value: v.salesQty,
@@ -398,7 +402,7 @@ export default {
       chartsSegment(this.requestParams).then((res) => {
         this.initChartsPie({
           id: "pie2",
-          title: "车身形式占比",
+          title: "汽车类型",
           data: res.data
             ? res.data.map((v) => ({
                 value: v.salesQty,

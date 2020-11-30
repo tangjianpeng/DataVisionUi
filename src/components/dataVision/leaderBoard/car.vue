@@ -33,7 +33,9 @@
       >
       </el-date-picker>
       <el-radio-group>
-        <el-button type="primary" @click="reset">重 置</el-button>
+        <el-button type="primary" icon="el-icon-refresh-right" @click="reset">
+          重 置
+        </el-button>
       </el-radio-group>
     </div>
     <div class="selectionBox">
