@@ -88,29 +88,41 @@
       </div>
     </div>
     <!-- echart -->
-    <div class="echart" v-show="isCountry">
-      <div class="left" id="bar"></div>
+    <div class="echart-box" v-show="isCountry">
+      <div class="ecahrt-div" id="bar"></div>
     </div>
     <div class="echart-box" v-show="!isCountry">
       <div class="echart-item">
-        <div id="bar1"></div>
+        <div class="ecahrt-div" id="bar1"></div>
       </div>
       <div class="echart-item">
-        <div id="bar2"></div>
+        <div class="ecahrt-div" id="bar2"></div>
       </div>
     </div>
     <div class="echart-box">
       <div class="echart-item">
-        <div id="pie1"></div>
+        <div class="ecahrt-div" id="pie1"></div>
       </div>
       <div class="echart-item">
-        <div id="pie2"></div>
+        <div class="ecahrt-div" id="pie2"></div>
       </div>
+    </div>
+    <div class="echart-box" v-show="isCountry || isCity">
+      <div class="ecahrt-div" id="bar3"></div>
+    </div>
+    <div class="echart-box" v-show="isCountry">
+      <div class="ecahrt-div" id="bar4"></div>
+    </div>
+    <div class="echart-box" v-show="isProvince">
+      <div class="ecahrt-div" id="geo"></div>
     </div>
   </div>
 </template>
 
 <script>
+// 地图geo
+require("echarts/lib/component/geo");
+require("echarts/map/js/china");
 import { dvProvince, dvCity, carSales, salesRatio } from "@/api/data";
 import {
   chartsManf,
@@ -317,6 +329,9 @@ export default {
       !this.isStock && this.chartsFuelType();
       this.isStock && this.chartsManfProp();
       this.chartsSegment();
+      this.isCountry && this.chartsManf();
+      this.isProvince && this.chartsProvince();
+      (this.isCountry || this.isCity) && this.chartsCity();
     },
     // 月和累计量
     salesRatio() {
@@ -337,12 +352,6 @@ export default {
         });
       });
     },
-    // 厂商销量
-    chartsManf() {},
-    // 省份销量
-    chartsProvince() {},
-    // 城市销量
-    chartsCity() {},
     // 品牌TOP10
     chartsBrand() {
       chartsBrand(this.requestParams).then((res) => {
@@ -412,9 +421,46 @@ export default {
         });
       });
     },
+    // 城市销量
+    chartsCity() {
+      chartsCity(this.requestParams).then((res) => {
+        this.initChartsBar({
+          isRotate: true,
+          id: "bar3",
+          title: "城市TOP10",
+          data: res.data ? res.data.map((v) => v.cityName) : [],
+          seriesData: res.data ? res.data.map((v) => v.salesQty) : [],
+        });
+      });
+    },
+    // 厂商销量
+    chartsManf() {
+      chartsManf(this.requestParams).then((res) => {
+        this.initChartsBar({
+          isRotate: true,
+          id: "bar4",
+          title: "厂商TOP10",
+          data: res.data ? res.data.map((v) => v.manfName) : [],
+          seriesData: res.data ? res.data.map((v) => v.salesQty) : [],
+        });
+      });
+    },
+    // 省份销量
+    chartsProvince() {
+      chartsProvince(this.requestParams).then((res) => {
+        this.initChartsGeo({
+          isRotate: true,
+          id: "geo",
+          title: "全国销量分布",
+          data: res.data
+            ? res.data.map((v) => ({ name: v.provinceName, value: v.salesQty }))
+            : [],
+        });
+      });
+    },
     // 柱状图
     initChartsBar({ isRotate, id, title, data, seriesData }) {
-      const chart = echarts.init(document.getElementById(id), "macarons");
+      const chart = echarts.init(document.getElementById(id));
       if (!chart) return;
       this.$nextTick(() => {
         setTimeout(() => {
@@ -530,7 +576,7 @@ export default {
     },
     // 饼图
     initChartsPie({ id, title, data }) {
-      const chart = echarts.init(document.getElementById(id), "macarons");
+      const chart = echarts.init(document.getElementById(id));
       if (!chart) return;
       this.$nextTick(() => {
         let colorList = [
@@ -620,6 +666,212 @@ export default {
         });
       });
     },
+    initChartsGeo({ id, title, data }) {
+      const chart = echarts.init(document.getElementById(id));
+      if (!chart) return;
+
+      var provinceList = [
+        { name: "北京", key: "北京市" },
+        { name: "天津", key: "天津市" },
+        { name: "上海", key: "上海市" },
+        { name: "重庆", key: "重庆市" },
+        { name: "河北", key: "河北省" },
+        { name: "河南", key: "河南省" },
+        { name: "云南", key: "云南省" },
+        { name: "辽宁", key: "辽宁省" },
+        { name: "黑龙江", key: "黑龙江省" },
+        { name: "湖南", key: "湖南省" },
+        { name: "安徽", key: "安徽省" },
+        { name: "山东", key: "山东省" },
+        { name: "新疆", key: "新疆维吾尔自治区" },
+        { name: "江苏", key: "江苏省" },
+        { name: "浙江", key: "浙江省" },
+        { name: "江西", key: "江西省" },
+        { name: "湖北", key: "湖北省" },
+        { name: "广西", key: "广西壮族自治区" },
+        { name: "甘肃", key: "甘肃省" },
+        { name: "山西", key: "山西省" },
+        { name: "内蒙古", key: "内蒙古自治区" },
+        { name: "陕西", key: "陕西省" },
+        { name: "吉林", key: "吉林省" },
+        { name: "福建", key: "福建省" },
+        { name: "贵州", key: "贵州省" },
+        { name: "广东", key: "广东省" },
+        { name: "青海", key: "青海省" },
+        { name: "西藏", key: "西藏自治区" },
+        { name: "四川", key: "四川省" },
+        { name: "宁夏", key: "宁夏回族自治区" },
+        { name: "海南", key: "海南省" },
+        { name: "台湾", key: "台湾" },
+        { name: "香港", key: "香港特别行政区" },
+        { name: "澳门", key: "澳门特别行政区" },
+      ];
+
+      var yData = provinceList.map((v) => v.name);
+
+      var provinceData = provinceList.map(({ name, key }) => ({
+        name,
+        value: data.find((v) => v.name === key)
+          ? data.find((v) => v.name === key).value
+          : 0,
+      }));
+
+      provinceData.sort(function (o1, o2) {
+        if (isNaN(o1.value) || o1.value == null) return -1;
+        if (isNaN(o2.value) || o2.value == null) return 1;
+        return o1.value - o2.value;
+      });
+
+      this.$nextTick(() => {
+        chart.setOption({
+          title: {
+            text: title || "",
+          },
+          tooltip: {
+            show: true,
+            // formatter: function (params) {
+            //   return params.name + "：" + params.data["value"] + "%";
+            // },
+          },
+          visualMap: {
+            type: "continuous",
+            text: ["", ""],
+            showLabel: true,
+            seriesIndex: [0],
+            min: 0,
+            max: provinceData.length
+              ? provinceData[provinceData.length - 1].value
+              : 1,
+            inRange: {
+              color: [
+                "#f3f3f3",
+                "#edfbfb",
+                "#b7d6f3",
+                "#40a9ed",
+                "#3598c1",
+                "#215096",
+              ],
+            },
+            textStyle: {
+              color: "#000",
+            },
+            bottom: 30,
+            left: "left",
+          },
+          grid: {
+            right: 50,
+            top: 30,
+            bottom: 30,
+            left: "66%",
+          },
+          geo: {
+            roam: true,
+            map: "china",
+            left: "left",
+            top: "30px",
+            bottom: "30px",
+            left: "10%",
+            layoutSize: "80%",
+            label: {
+              emphasis: {
+                show: false,
+              },
+            },
+            itemStyle: {
+              emphasis: {
+                areaColor: "#FFF",
+              },
+            },
+          },
+          yAxis: {
+            type: "category",
+            nameGap: 16,
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: "#ddd",
+              },
+            },
+            axisTick: {
+              show: false,
+              lineStyle: {
+                color: "#ddd",
+              },
+            },
+            axisLabel: {
+              interval: 0,
+              textStyle: {
+                color: "#999",
+              },
+            },
+            data: yData,
+          },
+          xAxis: {
+            type: "value",
+            scale: true,
+            position: "top",
+            splitNumber: 1,
+            boundaryGap: false,
+            splitLine: {
+              show: false,
+            },
+            axisLine: {
+              show: false,
+            },
+            axisTick: {
+              show: false,
+            },
+            axisLabel: {
+              margin: 2,
+              textStyle: {
+                color: "#aaa",
+              },
+            },
+          },
+          series: [
+            {
+              name: "销量",
+              type: "map",
+              roam: false,
+              geoIndex: 0,
+              label: {
+                show: false,
+              },
+              data: provinceData,
+            },
+            {
+              name: "销量",
+              type: "bar",
+              roam: false,
+              visualMap: false,
+              zlevel: 2,
+              barMaxWidth: 20,
+              itemStyle: {
+                normal: {
+                  color: "#40a9ed",
+                },
+                emphasis: {
+                  color: "#3596c0",
+                },
+              },
+              label: {
+                normal: {
+                  show: false,
+                  position: "right",
+                  offset: [0, 10],
+                },
+                emphasis: {
+                  show: true,
+                  position: "right",
+                  offset: [10, 0],
+                },
+              },
+              data: provinceData,
+            },
+          ],
+        });
+      });
+    },
     toLocaleString(data) {
       if (!Number(data)) return data;
       let d = Number(data).toLocaleString();
@@ -673,10 +925,6 @@ export default {
 }
 .dataEcharts {
   width: 100%;
-}
-.left {
-  width: 100%;
-  height: 500px;
 }
 .right {
   width: 400px;
@@ -768,23 +1016,18 @@ export default {
   font-size: 16px;
   color: #82929f;
 }
-.echart {
+/* .echart {
   margin-bottom: 12px;
-  padding: 10px;
   height: 300px;
-  background: #fff;
-}
+} */
 .echart-box {
   margin-bottom: 12px;
   width: 100%;
-  height: 300px;
   overflow: hidden;
 }
 .echart-item {
   float: left;
   width: calc(50% - 10px);
-  padding: 10px;
-  height: 300px;
   background: #fff;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12),
     0px 0px 6px 0px rgba(0, 0, 0, 0.04);
@@ -792,12 +1035,13 @@ export default {
 .echart-item:last-child {
   float: right;
 }
-#bar,
-#bar1,
-#bar2,
-#pie1,
-#pie2 {
+.ecahrt-div {
   width: 100%;
-  height: 100%;
+  height: 300px;
+  padding: 10px;
+  background: #fff;
+}
+#geo {
+  height: 500px;
 }
 </style>
