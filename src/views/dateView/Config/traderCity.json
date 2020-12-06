@@ -114,7 +114,7 @@
     "disabled": false,
     "isCheck": true,
     "isColumn": true,
-    "isSelect": false
+    "isSelect": true
   },
   {
     "id": "vehicle_type2",
