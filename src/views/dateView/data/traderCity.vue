@@ -173,11 +173,6 @@ export default {
         name,
       }));
     });
-    dvCity({ name: "" }).then((res) => {
-      this.selectData.cityName = (res.data || []).map(({ name }) => ({
-        name,
-      }));
-    });
     dvCommerBrand().then((res) => {
       this.selectData.brandName = (res.data || []).map((v) => ({
         name: v.commerBrand || v.name,
@@ -227,6 +222,13 @@ export default {
         return;
       }
       this.$emit("messageBox");
+    },
+    dvCity(name = "") {
+      dvCity({ name }).then((res) => {
+        this.selectData.cityName = [
+          ...new Set((res.data || []).map(({ name }) => name)),
+        ].map((name) => ({ name }));
+      });
     },
     dvOrigEnterpriseName(bname = "") {
       dvOrigEnterpriseName({ bname }).then((res) => {
@@ -315,6 +317,10 @@ export default {
     },
   },
   watch: {
+    "selectValue.provinceName": function (data, old) {
+      this.selectValue.cityName = [];
+      this.dvCity(data.join(","));
+    },
     "selectValue.brandName": function (data) {
       this.selectValue.origEnterpriseName = [];
       if (data.length > 0) {

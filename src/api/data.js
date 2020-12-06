@@ -293,6 +293,15 @@ export function aliPayPc(data) {
   });
 }
 
+//购买数据包，提交申请
+export function dataPack(data) {
+  return request({
+    url: "/buy/dataPack",
+    method: "post",
+    data,
+  });
+}
+
 //仪表盘
 
 // 累计销量
