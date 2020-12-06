@@ -169,7 +169,14 @@ export function dvUseProp() {
     data: {},
   });
 }
-
+// 商用车-车辆类别
+export function dvVehicleType() {
+  return request({
+    url: "/dv/vehicleType",
+    method: "post",
+    data: {},
+  });
+}
 // 短信验证码接口
 export function sendCode(data) {
   return request({

@@ -42,6 +42,7 @@
       <el-date-picker
         v-if="dateType == '1'"
         v-model="dateVbl"
+        :picker-options="dateValidate"
         type="year"
         value-format="yyyy"
         style="width: 200px;"
@@ -52,6 +53,7 @@
       <el-date-picker
         v-if="dateType == '2'"
         v-model="dateVbl"
+        :picker-options="dateValidate"
         type="month"
         value-format="yyyy-MM"
         style="width: 200px;"
@@ -91,6 +93,10 @@
     <div class="echart-box" v-show="isCountry">
       <div class="ecahrt-div" id="bar"></div>
     </div>
+    <div class="echart-box" v-show="isProvince">
+      <div class="ecahrt-div" id="geo"></div>
+      <div class="ecahrt-div" id="geo-bar"></div>
+    </div>
     <div class="echart-box" v-show="!isCountry">
       <div class="echart-item">
         <div class="ecahrt-div" id="bar1"></div>
@@ -113,16 +119,13 @@
     <div class="echart-box" v-show="isCountry">
       <div class="ecahrt-div" id="bar4"></div>
     </div>
-    <div class="echart-box" v-show="isProvince">
-      <div class="ecahrt-div" id="geo"></div>
-    </div>
   </div>
 </template>
 
 <script>
-// 地图geo
 require("echarts/lib/component/geo");
 require("echarts/map/js/china");
+
 import { dvProvince, dvCity, carSales, salesRatio } from "@/api/data";
 import {
   chartsManf,
@@ -135,6 +138,44 @@ import {
   chartsSegment,
 } from "@/api/charts";
 import echarts from "echarts";
+
+const provinceList = [
+  { name: "北京", key: "北京市" },
+  { name: "天津", key: "天津市" },
+  { name: "上海", key: "上海市" },
+  { name: "重庆", key: "重庆市" },
+  { name: "河北", key: "河北省" },
+  { name: "河南", key: "河南省" },
+  { name: "云南", key: "云南省" },
+  { name: "辽宁", key: "辽宁省" },
+  { name: "黑龙江", key: "黑龙江省" },
+  { name: "湖南", key: "湖南省" },
+  { name: "安徽", key: "安徽省" },
+  { name: "山东", key: "山东省" },
+  { name: "新疆", key: "新疆维吾尔自治区" },
+  { name: "江苏", key: "江苏省" },
+  { name: "浙江", key: "浙江省" },
+  { name: "江西", key: "江西省" },
+  { name: "湖北", key: "湖北省" },
+  { name: "广西", key: "广西壮族自治区" },
+  { name: "甘肃", key: "甘肃省" },
+  { name: "山西", key: "山西省" },
+  { name: "内蒙古", key: "内蒙古自治区" },
+  { name: "陕西", key: "陕西省" },
+  { name: "吉林", key: "吉林省" },
+  { name: "福建", key: "福建省" },
+  { name: "贵州", key: "贵州省" },
+  { name: "广东", key: "广东省" },
+  { name: "青海", key: "青海省" },
+  { name: "西藏", key: "西藏自治区" },
+  { name: "四川", key: "四川省" },
+  { name: "宁夏", key: "宁夏回族自治区" },
+  { name: "海南", key: "海南省" },
+  { name: "香港", key: "香港特别行政区" },
+  { name: "澳门", key: "澳门特别行政区" },
+  { name: "台湾", key: "台湾省" },
+  { name: "南沙诸岛", key: "南沙诸岛" },
+];
 
 function formatNum(strNum) {
   if (strNum.length <= 3) {
@@ -169,6 +210,9 @@ export default {
 
       dateType: "2",
       dateVbl: "",
+      endDateYear: 0,
+      endDateMonth: 0,
+      endDateStock: 0,
 
       provinceDataSlt: [
         {
@@ -293,19 +337,35 @@ export default {
         cityName: this.isCity && this.placeVal !== "-1" ? this.placeVal : "",
       };
     },
+    dateValidate() {
+      return {
+        disabledDate: (time) => {
+          if (this.sourceType === "1" || this.sourceType === "2") {
+            return (
+              time >
+              (this.dateType === "1" ? this.endDateYear : this.endDateMonth)
+            );
+          }
+          if (this.sourceType === "3") {
+            return time > this.endDateStock;
+          }
+          return true;
+        },
+      };
+    },
   },
   methods: {
     init() {
-      // this.placeVal = "-1";
-      // this.getData();
       this.reset();
       this.confirm();
     },
     dateTypeChange(val) {
-      if (val === "1") {
+      if (val === "2") {
+        this.dateVbl = this.timeData;
+      } else if (this.sourceType === "3") {
         this.dateVbl = this.stockTime;
       } else {
-        this.dateVbl = this.timeData;
+        this.dateVbl = this.timeData ? this.timeData.slice(0, 4) : "";
       }
     },
     reset() {
@@ -384,6 +444,7 @@ export default {
           title: "燃料类型",
           data: res.data
             ? res.data.map((v) => ({
+                valueReal: v.salesQty,
                 value: v.salesQty,
                 name: v.fuelTypeName,
               }))
@@ -447,16 +508,18 @@ export default {
     },
     // 省份销量
     chartsProvince() {
-      chartsProvince(this.requestParams).then((res) => {
-        this.initChartsGeo({
-          isRotate: true,
-          id: "geo",
-          title: "全国销量分布",
-          data: res.data
-            ? res.data.map((v) => ({ name: v.provinceName, value: v.salesQty }))
-            : [],
-        });
-      });
+      chartsProvince({ ...this.requestParams, provinceName: "" }).then(
+        (res) => {
+          this.initChartsGeo(
+            res.data
+              ? res.data.map((v) => ({
+                  name: v.provinceName,
+                  value: v.salesQty,
+                }))
+              : []
+          );
+        }
+      );
     },
     // 柱状图
     initChartsBar({ isRotate, id, title, data, seriesData }) {
@@ -576,8 +639,9 @@ export default {
     },
     // 饼图
     initChartsPie({ id, title, data }) {
-      const chart = echarts.init(document.getElementById(id));
-      if (!chart) return;
+      const chartPie = echarts.init(document.getElementById(id));
+      if (!chartPie) return;
+      console.log(data);
       this.$nextTick(() => {
         let colorList = [
           "#0b576f",
@@ -594,7 +658,10 @@ export default {
         if (data.length < 8) {
           colorList = colorList.slice(8 - data.length);
         }
-        chart.setOption({
+        chartPie.setOption({
+          dataset: {
+            source: [["name", "value"], ...data.map((v) => [v.name, v.value])],
+          },
           color: colorList,
           title: {
             text: title || "",
@@ -607,108 +674,79 @@ export default {
           },
           toolbox: {
             feature: {
-              dataView: { show: true, readOnly: false },
-              restore: { show: true },
-              saveAsImage: { show: true },
+              dataView: {
+                show: true,
+                readOnly: false,
+              },
+              restore: {
+                show: true,
+              },
+              saveAsImage: {
+                show: true,
+              },
             },
           },
           tooltip: {
             trigger: "item",
             formatter: function (p) {
-              return p.name + "：" + formatNum(p.value) + "（辆）";
+              return p.name + "：" + formatNum(p.value[1] || 0) + "（辆）";
             },
           },
           series: [
             {
+              name: "半径模式",
               type: "pie",
+              clockWise: false,
               center: ["50%", "60%"],
               radius: ["45%", "60%"],
-              clockwise: true,
-              avoidLabelOverlap: true,
-              hoverOffset: 15,
-              itemStyle: {
-                normal: {
-                  color: function (params) {
-                    return colorList[params.dataIndex];
-                  },
-                },
+              roseType: "area",
+              encode: {
+                itemName: "name",
+                value: "value",
               },
               label: {
                 show: true,
                 position: "outside",
-                formatter: "{a|{b}：{d}%}",
-                rich: {
-                  hr: {
-                    backgroundColor: "t",
-                    borderRadius: 3,
-                    width: 3,
-                    height: 3,
-                    padding: [3, 3, 0, -12],
-                  },
-                  a: {
-                    padding: [-30, 15, -20, 15],
-                    color: "#999",
-                  },
-                },
+                formatter: "{b}：{d}%",
+                height: 50,
               },
               labelLine: {
                 normal: {
-                  length: 5,
-                  length2: 20,
+                  length: 10,
+                  length2: 10,
                   lineStyle: {
                     width: 1,
                   },
                 },
               },
-              data: data,
+            },
+            {
+              name: "底色",
+              type: "pie",
+              hoverAnimation: false,
+              center: ["50%", "60%"],
+              radius: ["44%", "45%"],
+              itemStyle: {
+                color: "rgba(223,223,223,0.4)",
+              },
+              data: [
+                {
+                  value: 1,
+                  name: "",
+                },
+              ],
+              label: {
+                show: false,
+              },
             },
           ],
         });
       });
     },
-    initChartsGeo({ id, title, data }) {
-      const chart = echarts.init(document.getElementById(id));
-      if (!chart) return;
-
-      var provinceList = [
-        { name: "北京", key: "北京市" },
-        { name: "天津", key: "天津市" },
-        { name: "上海", key: "上海市" },
-        { name: "重庆", key: "重庆市" },
-        { name: "河北", key: "河北省" },
-        { name: "河南", key: "河南省" },
-        { name: "云南", key: "云南省" },
-        { name: "辽宁", key: "辽宁省" },
-        { name: "黑龙江", key: "黑龙江省" },
-        { name: "湖南", key: "湖南省" },
-        { name: "安徽", key: "安徽省" },
-        { name: "山东", key: "山东省" },
-        { name: "新疆", key: "新疆维吾尔自治区" },
-        { name: "江苏", key: "江苏省" },
-        { name: "浙江", key: "浙江省" },
-        { name: "江西", key: "江西省" },
-        { name: "湖北", key: "湖北省" },
-        { name: "广西", key: "广西壮族自治区" },
-        { name: "甘肃", key: "甘肃省" },
-        { name: "山西", key: "山西省" },
-        { name: "内蒙古", key: "内蒙古自治区" },
-        { name: "陕西", key: "陕西省" },
-        { name: "吉林", key: "吉林省" },
-        { name: "福建", key: "福建省" },
-        { name: "贵州", key: "贵州省" },
-        { name: "广东", key: "广东省" },
-        { name: "青海", key: "青海省" },
-        { name: "西藏", key: "西藏自治区" },
-        { name: "四川", key: "四川省" },
-        { name: "宁夏", key: "宁夏回族自治区" },
-        { name: "海南", key: "海南省" },
-        { name: "台湾", key: "台湾" },
-        { name: "香港", key: "香港特别行政区" },
-        { name: "澳门", key: "澳门特别行政区" },
-      ];
-
-      var yData = provinceList.map((v) => v.name);
-
+    initChartsGeo(data) {
+      const chartGeo = echarts.init(document.getElementById("geo"));
+      const chartBar = echarts.init(document.getElementById("geo-bar"));
+      if (!chartGeo) return;
       var provinceData = provinceList.map(({ name, key }) => ({
         name,
         value: data.find((v) => v.name === key)
@@ -722,16 +760,15 @@ export default {
         return o1.value - o2.value;
       });
 
+      const yData = provinceData.map((v) => v.name);
+
       this.$nextTick(() => {
-        chart.setOption({
+        chartGeo.setOption({
           title: {
-            text: title || "",
+            text: "全国销量分布",
           },
           tooltip: {
             show: true,
-            // formatter: function (params) {
-            //   return params.name + "：" + params.data["value"] + "%";
-            // },
           },
           visualMap: {
             type: "continuous",
@@ -755,23 +792,12 @@ export default {
             textStyle: {
               color: "#000",
             },
-            bottom: 30,
             left: "left",
-          },
-          grid: {
-            right: 50,
-            top: 30,
-            bottom: 30,
-            left: "66%",
           },
           geo: {
-            roam: true,
+            roam: false,
             map: "china",
-            left: "left",
-            top: "30px",
-            bottom: "30px",
-            left: "10%",
-            layoutSize: "80%",
+            layoutSize: "90%",
             label: {
               emphasis: {
                 show: false,
@@ -779,9 +805,37 @@ export default {
             },
             itemStyle: {
               emphasis: {
-                areaColor: "#FFF",
+                areaColor: "#fff464",
               },
             },
+          },
+          series: [
+            {
+              name: "销量",
+              type: "map",
+              roam: false,
+              geoIndex: 0,
+              label: {
+                show: false,
+              },
+              data: provinceData,
+            },
+          ],
+        });
+        const xMax = parseInt(
+          provinceData[provinceData.length - 1]
+            ? provinceData[provinceData.length - 1].value
+            : 0
+        );
+        chartBar.setOption({
+          tooltip: {
+            show: true,
+          },
+          grid: {
+            right: 100,
+            top: 50,
+            bottom: 50,
+            left: 100,
           },
           yAxis: {
             type: "category",
@@ -822,23 +876,17 @@ export default {
               show: false,
             },
             axisLabel: {
+              show: true,
+              showMinLabel: true,
+              showMaxLabel: true,
               margin: 2,
               textStyle: {
                 color: "#aaa",
               },
             },
+            max: xMax,
           },
           series: [
-            {
-              name: "销量",
-              type: "map",
-              roam: false,
-              geoIndex: 0,
-              label: {
-                show: false,
-              },
-              data: provinceData,
-            },
             {
               name: "销量",
               type: "bar",
@@ -851,7 +899,7 @@ export default {
                   color: "#40a9ed",
                 },
                 emphasis: {
-                  color: "#3596c0",
+                  color: "#fff464",
                 },
               },
               label: {
@@ -870,6 +918,37 @@ export default {
             },
           ],
         });
+
+        chartGeo.off("mouseover");
+        chartGeo.off("mousemove");
+        chartGeo.off("mouseout");
+        chartBar.off("mouseover");
+        chartBar.off("mousemove");
+        chartBar.off("mouseout");
+        chartGeo.on("mouseover", function (target) {
+          chartBar.dispatchAction({
+            type: "highlight",
+            name: target.name,
+          });
+        });
+        chartGeo.on("mouseout", function (target) {
+          chartBar.dispatchAction({
+            type: "downplay",
+            name: target.name,
+          });
+        });
+        chartBar.on("mouseover", function (target) {
+          chartGeo.dispatchAction({
+            type: "highlight",
+            name: target.name,
+          });
+        });
+        chartBar.on("mouseout", function (target) {
+          chartGeo.dispatchAction({
+            type: "downplay",
+            name: target.name,
+          });
+        });
       });
     },
     toLocaleString(data) {
@@ -881,6 +960,17 @@ export default {
   watch: {
     tabId() {
       this.init();
+    },
+    timeData(data) {
+      if (data) {
+        this.endDateYear = new Date(data.slice(0, 4)).getTime();
+        this.endDateMonth = new Date(data).getTime();
+      }
+    },
+    stockTime(data) {
+      if (data) {
+        this.endDateStock = new Date(data).getTime();
+      }
     },
   },
 };
@@ -922,9 +1012,6 @@ export default {
 }
 .dataBtn {
   padding-bottom: 10px;
-}
-.dataEcharts {
-  width: 100%;
 }
 .right {
   width: 400px;
@@ -1016,10 +1103,6 @@ export default {
   font-size: 16px;
   color: #82929f;
 }
-/* .echart {
-  margin-bottom: 12px;
-  height: 300px;
-} */
 .echart-box {
   margin-bottom: 12px;
   width: 100%;
@@ -1042,6 +1125,13 @@ export default {
   background: #fff;
 }
 #geo {
+  float: left;
+  width: 60%;
+  height: 500px;
+}
+#geo-bar {
+  float: left;
+  width: 40%;
   height: 500px;
 }
 </style>

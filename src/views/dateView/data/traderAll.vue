@@ -71,6 +71,7 @@ import {
   dvDisplacement,
   dvEmission,
   dvUseProp,
+  dvVehicleType,
   commerList,
   carCommerList,
 } from "@/api/data";
@@ -207,6 +208,11 @@ export default {
         .filter((v) => v)
         .map(({ name }) => ({ name }));
     });
+    dvVehicleType().then((res) => {
+      this.selectData.vehicleType = (res.data || [])
+        .filter((v) => v)
+        .map(({ name }) => ({ name }));
+    });
   },
   methods: {
     //查询
@@ -280,6 +286,9 @@ export default {
           : "",
         useProp: this.checkedList.includes("use_prop")
           ? this.selectValue.useProp.join()
+          : "",
+        vehicleType: this.checkedList.includes("vehicle_type")
+          ? this.selectValue.vehicleType.join()
           : "",
       };
       const promise = this.authority ? carCommerList(data) : commerList(data);

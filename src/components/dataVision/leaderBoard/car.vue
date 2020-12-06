@@ -15,6 +15,7 @@
       <el-date-picker
         v-if="dateType == 'month'"
         v-model="time"
+        :picker-options="dateValidate"
         type="month"
         value-format="yyyy-MM"
         style="margin-right: 30px;"
@@ -25,6 +26,7 @@
       <el-date-picker
         v-else
         v-model="time"
+        :picker-options="dateValidate"
         type="year"
         value-format="yyyy"
         style="margin-right: 30px;"
@@ -72,6 +74,9 @@ export default {
       tableType: "",
       sourceType: "",
       time: "",
+      endDateYear: 0,
+      endDateMonth: 0,
+      endDateStock: 0,
       dateType: "", // year,month
       tableData: [],
     };
@@ -143,14 +148,38 @@ export default {
     },
     timeData(data) {
       if (data) {
+        this.endDateYear = new Date(data.slice(0, 4)).getTime();
+        this.endDateMonth = new Date(data).getTime();
         this.timeChange();
+      }
+    },
+    stockTime(data) {
+      if (data) {
+        this.endDateStock = new Date(data).getTime();
       }
     },
     dateType(data) {
       this.timeChange();
     },
   },
-  computed: {},
+  computed: {
+    dateValidate() {
+      return {
+        disabledDate: (time) => {
+          if (this.sourceType === "1" || this.sourceType === "2") {
+            return (
+              time >
+              (this.dateType === "year" ? this.endDateYear : this.endDateMonth)
+            );
+          }
+          if (this.sourceType === "3") {
+            return time > this.endDateStock;
+          }
+          return true;
+        },
+      };
+    },
+  },
 };
 </script>
 

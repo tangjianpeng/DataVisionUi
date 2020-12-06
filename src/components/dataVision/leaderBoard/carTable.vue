@@ -10,7 +10,7 @@
         <el-table-column
           type="index"
           label="排名"
-          width="180"
+          width="100"
         ></el-table-column>
         <el-table-column
           prop="manfName"

@@ -171,6 +171,11 @@ export default {
         name,
       }));
     });
+    dvCity({ name: "" }).then((res) => {
+      this.selectData.cityName = (res.data || []).map(({ name }) => ({
+        name,
+      }));
+    });
     dvCarBrand().then((res) => {
       this.selectData.brandName = (res.data || []).map((v) => ({
         name: v.bname || v.name,
@@ -200,13 +205,6 @@ export default {
         return;
       }
       this.$emit("messageBox");
-    },
-    dvCity(name) {
-      dvCity({ name }).then((res) => {
-        this.selectData.cityName = (res.data || []).map(({ name }) => ({
-          name,
-        }));
-      });
     },
     dvCarManf(bname = "") {
       dvCarManf({ bname }).then((res) => {
@@ -291,14 +289,6 @@ export default {
     },
   },
   watch: {
-    "selectValue.provinceName": function (data) {
-      this.selectValue.cityName = [];
-      if (data.length > 0) {
-        this.dvCity(data.join(","));
-      } else {
-        this.selectData.cityName = [];
-      }
-    },
     "selectValue.brandName": function (data) {
       this.selectValue.manfName = [];
       if (data.length > 0) {

@@ -71,6 +71,7 @@ import {
   dvDisplacement,
   dvEmission,
   dvUseProp,
+  dvVehicleType,
   commerList,
   carCommerList,
 } from "@/api/data";
@@ -172,6 +173,11 @@ export default {
         name,
       }));
     });
+    dvCity({ name: "" }).then((res) => {
+      this.selectData.cityName = (res.data || []).map(({ name }) => ({
+        name,
+      }));
+    });
     dvCommerBrand().then((res) => {
       this.selectData.brandName = (res.data || []).map((v) => ({
         name: v.commerBrand || v.name,
@@ -207,6 +213,11 @@ export default {
         .filter((v) => v)
         .map(({ name }) => ({ name }));
     });
+    dvVehicleType().then((res) => {
+      this.selectData.vehicleType = (res.data || [])
+        .filter((v) => v)
+        .map(({ name }) => ({ name }));
+    });
   },
   methods: {
     //查询
@@ -216,13 +227,6 @@ export default {
         return;
       }
       this.$emit("messageBox");
-    },
-    dvCity(name) {
-      dvCity({ name }).then((res) => {
-        this.selectData.cityName = (res.data || []).map(({ name }) => ({
-          name,
-        }));
-      });
     },
     dvOrigEnterpriseName(bname = "") {
       dvOrigEnterpriseName({ bname }).then((res) => {
@@ -281,6 +285,9 @@ export default {
         useProp: this.checkedList.includes("use_prop")
           ? this.selectValue.useProp.join()
           : "",
+        vehicleType: this.checkedList.includes("vehicle_type")
+          ? this.selectValue.vehicleType.join()
+          : "",
       };
       const promise = this.authority ? carCommerList(data) : commerList(data);
       promise.then((res) => {
@@ -308,14 +315,6 @@ export default {
     },
   },
   watch: {
-    "selectValue.provinceName": function (data) {
-      this.selectValue.cityName = [];
-      if (data.length > 0) {
-        this.dvCity(data.join(","));
-      } else {
-        this.selectData.cityName = [];
-      }
-    },
     "selectValue.brandName": function (data) {
       this.selectValue.origEnterpriseName = [];
       if (data.length > 0) {
