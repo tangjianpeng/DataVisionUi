@@ -330,3 +330,12 @@ export function ranking(query) {
     params: query,
   });
 }
+
+// 行业资讯
+export function info(data) {
+  return request({
+    url: "/dv/info",
+    method: "post",
+    data,
+  });
+}
