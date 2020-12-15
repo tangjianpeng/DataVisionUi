@@ -439,46 +439,93 @@ export default {
     // 燃料类型
     chartsFuelType() {
       chartsFuelType(this.requestParams).then((res) => {
+        let total = 0;
+        const data = res.data
+          ? res.data.map((v) => ({
+              value: v.salesQty || 0,
+              name: v.fuelTypeName,
+            }))
+          : [];
+        if (data.length !== 0) {
+          let max = 0;
+          data.forEach((item) => {
+            total += item.value;
+            if (item.value > max) {
+              max = item.value;
+            }
+          });
+          max = max / 20;
+          data.forEach((item) => {
+            item.showVal = item.value < max ? max : item.value;
+          });
+        }
         this.initChartsPie({
           id: "pie1",
           title: "燃料类型",
-          data: res.data
-            ? res.data.map((v) => ({
-                valueReal: v.salesQty,
-                value: v.salesQty,
-                name: v.fuelTypeName,
-              }))
-            : [],
+          data,
+          total,
         });
       });
     },
     // 厂商属性
     chartsManfProp() {
       chartsManfProp(this.requestParams).then((res) => {
+        let total = 0;
+        const data = res.data
+          ? res.data.map((v) => ({
+              value: v.salesQty || 0,
+              name: v.manfPropName,
+            }))
+          : [];
+        if (data.length !== 0) {
+          let max = 0;
+          data.forEach((item) => {
+            total += item.value;
+            if (item.value > max) {
+              max = item.value;
+            }
+          });
+          max = max / 20;
+          data.forEach((item) => {
+            item.showVal = item.value < max ? max : item.value;
+          });
+        }
         this.initChartsPie({
           id: "pie1",
           title: "厂商属性",
-          data: res.data
-            ? res.data.map((v) => ({
-                value: v.salesQty,
-                name: v.manfPropName,
-              }))
-            : [],
+          data,
+          total,
         });
       });
     },
     // 车身形式
     chartsSegment() {
       chartsSegment(this.requestParams).then((res) => {
+        let total = 0;
+        const data = res.data
+          ? res.data.map((v) => ({
+              value: v.salesQty || 0,
+              name: v.segmentName,
+            }))
+          : [];
+        if (data.length !== 0) {
+          let max = 0;
+          data.forEach((item) => {
+            total += item.value;
+            if (item.value > max) {
+              max = item.value;
+            }
+          });
+          max = max / 20;
+          data.forEach((item) => {
+            item.showVal = item.value < max ? max : item.value;
+          });
+        }
         this.initChartsPie({
           id: "pie2",
           title: "汽车类型",
-          data: res.data
-            ? res.data.map((v) => ({
-                value: v.salesQty,
-                name: v.segmentName,
-              }))
-            : [],
+          data,
+          total,
         });
       });
     },
@@ -514,7 +561,7 @@ export default {
             res.data
               ? res.data.map((v) => ({
                   name: v.provinceName,
-                  value: v.salesQty,
+                  value: v.salesQty || 0,
                 }))
               : []
           );
@@ -638,10 +685,9 @@ export default {
       });
     },
     // 饼图
-    initChartsPie({ id, title, data }) {
+    initChartsPie({ id, title, data, total }) {
       const chartPie = echarts.init(document.getElementById(id));
       if (!chartPie) return;
-      console.log(data);
       this.$nextTick(() => {
         let colorList = [
           "#0b576f",
@@ -660,7 +706,10 @@ export default {
         }
         chartPie.setOption({
           dataset: {
-            source: [["name", "value"], ...data.map((v) => [v.name, v.value])],
+            source: [
+              ["name", "value"],
+              ...data.map((v) => [v.name, v.showVal, v.value]),
+            ],
           },
           color: colorList,
           title: {
@@ -689,7 +738,7 @@ export default {
           tooltip: {
             trigger: "item",
             formatter: function (p) {
-              return p.name + "：" + formatNum(p.value[1] || 0) + "（辆）";
+              return p.name + "：" + formatNum(p.value[2]) + "（辆）";
             },
           },
           series: [
@@ -707,7 +756,15 @@ export default {
               label: {
                 show: true,
                 position: "outside",
-                formatter: "{b}：{d}%",
+                formatter: function (p) {
+                  return (
+                    p.name +
+                    "：" +
+                    ((p.value[2] * 100) / total || 0).toFixed(2) +
+                    "%"
+                  );
+                },
+                // formatter: "{b}：{d}%",
                 height: 50,
               },
               labelLine: {
@@ -718,25 +775,6 @@ export default {
                     width: 1,
                   },
                 },
-              },
-            },
-            {
-              name: "底色",
-              type: "pie",
-              hoverAnimation: false,
-              center: ["50%", "60%"],
-              radius: ["44%", "45%"],
-              itemStyle: {
-                color: "rgba(223,223,223,0.4)",
-              },
-              data: [
-                {
-                  value: 1,
-                  name: "",
-                },
-              ],
-              label: {
-                show: false,
               },
             },
           ],

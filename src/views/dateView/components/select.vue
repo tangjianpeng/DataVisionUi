@@ -120,10 +120,13 @@ export default {
   border-right: solid 1px #efefef;
 }
 .selecItem_l {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   width: 120px;
   height: 100%;
   font-size: 14px;
-  line-height: 52px;
+  /* line-height: 52px; */
   text-align: right;
   padding-right: 20px;
   background-color: #f2f3f5;
@@ -131,6 +134,7 @@ export default {
 .selecItem_r {
   height: 100%;
   width: calc(100% - 120px);
+  min-width: 270px;
   padding-left: 20px;
   line-height: 52px;
 }

@@ -1,7 +1,7 @@
 <template>
-  <div class="information">
-    <div class="information-left">
-      <div class="information-tab">
+  <div class="container">
+    <div class="container-left">
+      <div class="container-left-tab">
         <el-tabs
           tab-position="left"
           v-model="noticeType"
@@ -15,68 +15,68 @@
         </el-tabs>
       </div>
     </div>
-    <div class="information-center">
+    <div class="container-center">
       <div
-        class="info-box"
+        class="content-box"
         v-for="(item, idx) in data"
         :key="idx"
         @click="() => toDetail(item)"
         v-if="showMain"
       >
         <img
-          class="info-icon"
+          class="content-icon"
           v-if="item.noticeTitleImg"
           :src="item.noticeTitleImg"
         />
-        <div class="info-title">
+        <div class="content-title">
           {{ item.noticeTitle }}
         </div>
-        <div class="info-summary">{{ item.summary }}</div>
-        <div class="info-bottom">
-          <div class="info-tab" v-if="item.noticeType">
+        <div class="content-summary">{{ item.noticeSynopsis }}</div>
+        <div class="content-bottom">
+          <div class="content-tab" v-if="item.noticeType">
             {{ item.noticeType }}
           </div>
-          <div class="info-orign" v-if="item.createBy">
+          <div class="content-orign" v-if="item.createBy">
             {{ item.createBy }}
           </div>
-          <div class="info-date" v-if="item.createTime">
+          <div class="content-date" v-if="item.createTime">
             {{ item.createTime }}
           </div>
-          <div class="info-num" v-if="item.searchValue">
+          <div class="content-num" v-if="item.searchValue">
             {{ item.searchValue }}
           </div>
           <div />
         </div>
       </div>
-      <div class="info-onload" v-if="showMain && showBtn">
+      <div class="content-onload" v-if="showMain && showBtn">
         <el-button type="success" @click="onload" round>加载更多</el-button>
       </div>
-      <div class="info-detail" v-if="!showMain">
+      <div class="content-detail" v-if="!showMain">
         <div class="detail-back" @click="onBack" />
-        <div class="info-title">
+        <div class="content-title">
           {{ detail.noticeTitle }}
         </div>
         <div class="detail-top">
-          <div class="info-tab" v-if="detail.noticeType">
+          <div class="content-tab" v-if="detail.noticeType">
             {{ detail.noticeType }}
           </div>
-          <div class="info-orign" v-if="detail.createBy">
+          <div class="content-orign" v-if="detail.createBy">
             {{ detail.createBy }}
           </div>
-          <div class="info-date" v-if="detail.createTime">
+          <div class="content-date" v-if="detail.createTime">
             {{ detail.createTime }}
           </div>
-          <div class="info-num" v-if="detail.searchValue">
+          <div class="content-num" v-if="detail.searchValue">
             {{ detail.searchValue }}
           </div>
         </div>
         <div class="detail-content">
-          {{ detail.summary }}
+          {{ detail.noticeSynopsis }}
         </div>
         <div class="detail-bottom" v-html="detail.noticeContent"></div>
       </div>
     </div>
-    <div class="information-right">
+    <div class="container-right">
       <div class="poster"></div>
     </div>
   </div>
@@ -112,7 +112,7 @@ export default {
     getData() {
       info({
         pageNum: this.pageNum || 1,
-        pageSize: this.pageSize || 10,
+        pageSize: this.pageSize,
         noticeType: this.noticeType === "0" ? "" : this.noticeType,
       }).then((res) => {
         if (Array.isArray(res.rows)) {
@@ -124,8 +124,6 @@ export default {
               noticeTitleImg: v.noticeTitleImg
                 ? process.env.VUE_APP_BASE_API + v.noticeTitleImg
                 : "",
-              summary:
-                "此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，此处是简介，",
             }))
           );
         }
@@ -133,8 +131,8 @@ export default {
     },
     handleClick(tab) {
       this.pageNum = 1;
-      this.pageSize = 10;
       this.data = [];
+      this.showMain = true;
       this.getData();
     },
     toDetail(item) {
@@ -152,38 +150,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.information {
-  display: flex;
-}
-
-.information {
+.container {
   height: 100%;
   width: 100%;
   padding-top: 50px;
   display: flex;
 }
-.information-left {
-  width: 300px;
+.container-left {
+  width: 260px;
   height: 100%;
 }
-.information-tab {
+.container-left-tab {
   position: fixed;
   top: 100px;
-  left: 50px;
+  left: 60px;
   bottom: 50px;
   width: 200px;
 }
-.information-left >>> .el-tabs--left .el-tabs__nav-wrap.is-left::after {
+.container-left-tab >>> .el-tabs--left .el-tabs__nav-wrap.is-left::after {
   width: 0;
 }
-.information-left >>> .el-tabs--left .el-tabs__nav-wrap.is-left .el-tabs__item {
-  padding-right: 80px;
+.container-left-tab
+  >>> .el-tabs--left
+  .el-tabs__nav-wrap.is-left
+  .el-tabs__item {
+  padding-right: 60px;
   line-height: 60px;
   height: 60px;
   font-size: 20px;
   font-weight: bold;
 }
-.information-left
+.container-left-tab
   >>> .el-tabs--left
   .el-tabs__nav-wrap.is-left
   .el-tabs__active-bar {
@@ -191,31 +188,36 @@ export default {
   height: 40px !important;
   margin-top: 10px;
 }
-.information-center {
+.container-center {
   flex: 1;
-  padding: 30px 100px 50px;
+  padding: 30px 60px 20px;
 }
-.info-box {
+.content-box {
   position: relative;
   width: 100%;
   padding: 16px 0;
   border-bottom: 1px solid #dfdfdf;
 }
-.info-icon {
+.content-icon {
   display: block;
   position: absolute;
-  top: 40px;
+  top: 30px;
   right: 8px;
-  width: 160px;
+  width: 150px;
   height: 100px;
 }
-.info-title {
-  display: block;
+.content-title {
+  width: calc(100% - 180px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   margin-bottom: 16px;
-  font-size: 1.17em;
+  font-size: 20px;
   font-weight: bold;
+  height: 32px;
+  line-height: 32px;
 }
-.info-summary {
+.content-summary {
   display: -webkit-box;
   overflow: hidden;
   white-space: normal !important;
@@ -229,13 +231,13 @@ export default {
   font-size: 14px;
   line-height: 20px;
 }
-.info-bottom {
+.content-bottom {
   display: flex;
   margin-top: 16px;
   align-content: center;
   align-items: center;
 }
-.info-tab {
+.content-tab {
   margin-right: 30px;
   padding: 0px 10px;
   font-size: 12px;
@@ -244,7 +246,7 @@ export default {
   border: 1px solid #999;
   border-radius: 5px;
 }
-.info-orign {
+.content-orign {
   margin-right: 30px;
   padding: 0px 10px 0px 24px;
   font-size: 14px;
@@ -253,7 +255,7 @@ export default {
   background: url("./user.png") 0 2px no-repeat;
   background-size: 20px 20px;
 }
-.info-date {
+.content-date {
   margin-right: 30px;
   padding: 0px 10px 0px 24px;
   font-size: 14px;
@@ -262,22 +264,22 @@ export default {
   background: url("./time.png") 0 2px no-repeat;
   background-size: 20px 20px;
 }
-.info-num {
+.content-num {
   flex: 1;
   padding: 4px 10px;
   font-size: 12px;
   color: #999;
 }
-.info-onload {
+.content-onload {
   padding: 20px;
   text-align: center;
 }
-.info-detail {
+.content-detail {
   position: relative;
 }
 .detail-back {
   position: absolute;
-  top: 0;
+  top: -4px;
   right: 0;
   width: 48px;
   height: 48px;
@@ -305,7 +307,7 @@ export default {
 .detail-bottom {
   padding-bottom: 20px;
 }
-.information-right {
+.container-right {
   width: 400px;
   height: 100%;
 }

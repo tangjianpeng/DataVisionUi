@@ -339,3 +339,12 @@ export function info(data) {
     data,
   });
 }
+
+// 行业报告
+export function report(data) {
+  return request({
+    url: "/dv/report",
+    method: "post",
+    data,
+  });
+}

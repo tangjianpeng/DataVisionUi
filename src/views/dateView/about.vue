@@ -9,7 +9,7 @@
     </div>
     <div class="item_box">
       <div class="item_">
-        <div class="item_t item_text">
+        <div class="item_l item_text">
           <div
             ref="textRef"
             style="
@@ -24,10 +24,12 @@
           >
             <p>数觉 Data Vision</p>
             <p>汽车数据服务平台</p>
-            <p>汇聚全国、省份、城市维度的汽车销量数据，为主机厂、经销商、金融保险机构、大学院校、广告营销机构、媒体等提供完整的汽车产业数据，为汽车产业用户提供专业的数据查询、数据分析等在线数据服务</p>
+            <p>
+              汇聚全国、省份、城市维度的汽车销量数据，为主机厂、经销商、金融保险机构、大学院校、广告营销机构、媒体等提供完整的汽车产业数据，为汽车产业用户提供专业的数据查询、数据分析等在线数据服务
+            </p>
           </div>
         </div>
-        <div class="item_i">
+        <div class="item_r item_img">
           <img
             ref="imgRef"
             :onload="(imgFinish = true)"
@@ -38,10 +40,15 @@
         </div>
       </div>
       <div class="item_">
-        <div class="item_t box2">
-          <img class="img" style="float: right;" src="@/assets/image/about900x600.jpg" alt />
+        <div class="item_l box2">
+          <img
+            class="img"
+            style="float: right;"
+            src="@/assets/image/about900x600.jpg"
+            alt
+          />
         </div>
-        <div class="item_i box1">
+        <div class="item_r box1">
           <h1>我们的愿景</h1>
           <p>让数据成为决策基础</p>
           <h1>我们的使命</h1>
@@ -63,24 +70,25 @@ export default {
     window.removeEventListener("resize", this.onResize);
   },
   components: {
-    foot
+    foot,
   },
   data() {
     return {
-      imgFinish: false
+      imgFinish: false,
     };
   },
   methods: {
     onResize() {
       if (this.$refs && this.$refs.textRef && this.$refs.imgRef) {
         if (this.$refs.textRef.clientWidth >= 630) {
-          this.$refs.textRef.style.height = `${this.$refs.imgRef.clientHeight -
-            110}px`;
+          this.$refs.textRef.style.height = `${
+            this.$refs.imgRef.clientHeight - 110
+          }px`;
         } else {
           this.$refs.textRef.style.height = "auto";
         }
       }
-    }
+    },
   },
   watch: {
     imgFinish(val) {
@@ -90,8 +98,8 @@ export default {
           window.addEventListener("resize", this.onResize);
         }, 100);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -133,33 +141,36 @@ export default {
   width: 100%;
   position: relative;
   float: left;
+  margin-bottom: 32px;
 }
-.item_t {
+.item_l {
   width: 50%;
   font-size: 22px;
   float: left;
-  margin-top: 50px;
 }
-.item_text {
-  color: #fff;
-}
-.item_t p {
+.item_l p {
   margin: 0;
   line-height: 1.5;
   padding: 12px 8% 12px 10%;
 }
-.item_t p:first-child {
+.item_l p:first-child {
   font-size: 32px;
   line-height: 1.2;
   padding-top: 20px;
   padding-bottom: 20px;
 }
-.item_i {
+.item_r {
   width: 50%;
   float: right;
 }
 .img {
   width: 90%;
+}
+.item_text {
+  color: #fff;
+}
+.item_img {
+  margin-top: 40px;
 }
 .box2 {
   z-index: 999;

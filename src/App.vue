@@ -90,8 +90,8 @@ export default {
   },
   created() {
     document.querySelector("meta[name=viewport]").content =
-      "width=1440px, user-scalable=no";
-    document.body.style.minWidth = "1440px";
+      "width=1260px, user-scalable=no";
+    document.body.style.minWidth = "1260px";
   },
   methods: {
     to(data) {
@@ -206,7 +206,7 @@ export default {
   height: 50px;
   line-height: 50px;
   font-size: 16px;
-  padding: 0 32px;
+  padding: 0 24px;
 }
 .nav_ >>> .el-tabs__nav-wrap::after {
   /* height: 0px; */

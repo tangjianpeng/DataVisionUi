@@ -7,11 +7,7 @@
         :data="tableData"
         border
       >
-        <el-table-column
-          type="index"
-          label="排名"
-          width="100"
-        ></el-table-column>
+        <el-table-column type="index" label="排名" width="80"></el-table-column>
         <el-table-column
           prop="manfName"
           label="厂商"
