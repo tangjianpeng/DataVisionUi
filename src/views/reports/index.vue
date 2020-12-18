@@ -31,7 +31,7 @@
         <div class="content-title">
           {{ item.noticeTitle }}
         </div>
-        <div class="content-money">
+        <div class="content-money" v-if="item.noticeMoney">
           <span class="content-money-btn" @click="toBuy">
             <span>售价</span>
             <img src="./renminbi.png" />
@@ -39,7 +39,6 @@
           </span>
         </div>
       </div>
-
       <div class="content-onload" v-if="showMain && showBtn">
         <el-button type="success" @click="onload" round>加载更多</el-button>
       </div>
@@ -52,7 +51,11 @@
         <div class="detail-bottom">
           <div>页数：{{ detail.noticePage }}</div>
           <div>文档大型：{{ detail.noticeSize }}</div>
-          <div class="detail-bottom-money" @click="toBuy">
+          <div
+            class="detail-bottom-money"
+            @click="toBuy"
+            v-if="detail.noticeMoney"
+          >
             ¥{{ detail.noticeMoney }}立即购买
           </div>
         </div>

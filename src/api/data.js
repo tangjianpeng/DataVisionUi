@@ -348,3 +348,12 @@ export function report(data) {
     data,
   });
 }
+
+// 行业报告
+export function poster(data) {
+  return request({
+    url: "/dv/poster",
+    method: "post",
+    data,
+  });
+}

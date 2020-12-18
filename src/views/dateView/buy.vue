@@ -91,19 +91,18 @@
       </div>
     </div>
     <div class="buy_right">
-      <div class="poster">
-        <!-- <img src="@/assets/image/haibao.jpg" alt="" /> -->
-      </div>
+      <div class="poster" :style="`background-image:url( ${posterImg})`"></div>
     </div>
   </div>
 </template>
 
 <script>
-import { payInfo, aliPayPc, dataPack } from "@/api/data";
+import { payInfo, aliPayPc, dataPack, poster } from "@/api/data";
 export default {
   name: "buy",
   data() {
     return {
+      posterImg: "",
       radio: "1",
       checkList: ["1", "2", "3", "4"],
       checkListdata: "",
@@ -168,6 +167,14 @@ export default {
   mounted() {
     this.payInfo();
     document.title = "申请购买- 数觉 DataVision";
+    poster()
+      .then((res) => {
+        if (res.data[0] && res.data[0].noticeTitleImg) {
+          this.posterImg =
+            process.env.VUE_APP_BASE_API + res.data[0].noticeTitleImg;
+        }
+      })
+      .catch((err) => {});
   },
   computed: {
     userId: function () {
@@ -211,7 +218,7 @@ export default {
   right: 50px;
   bottom: 50px;
   width: 300px;
-  background-image: url("../../assets/image/haibao.jpg");
+  /* background-image: url("../../assets/image/haibao.jpg"); */
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: contain;

@@ -77,13 +77,13 @@
       </div>
     </div>
     <div class="container-right">
-      <div class="poster"></div>
+      <div class="poster" :style="`background-image:url( ${posterImg})`"></div>
     </div>
   </div>
 </template>
 
 <script>
-import { info } from "@/api/data";
+import { info, poster } from "@/api/data";
 
 const tabType = {
   "1": "行业政策",
@@ -96,6 +96,7 @@ export default {
   name: "information",
   data() {
     return {
+      posterImg: "",
       showMain: true,
       data: [],
       detail: {},
@@ -107,6 +108,14 @@ export default {
   },
   mounted() {
     this.getData();
+    poster()
+      .then((res) => {
+        if (res.data[0] && res.data[0].noticeTitleImg) {
+          this.posterImg =
+            process.env.VUE_APP_BASE_API + res.data[0].noticeTitleImg;
+        }
+      })
+      .catch((err) => {});
   },
   methods: {
     getData() {
@@ -312,12 +321,13 @@ export default {
   height: 100%;
 }
 .poster {
+  display: block;
   position: fixed;
   top: 100px;
   right: 50px;
   bottom: 50px;
   width: 300px;
-  background-image: url("../../assets/image/haibao.jpg");
+  // background-image: url("../../assets/image/haibao.jpg");
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: contain;

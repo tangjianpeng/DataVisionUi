@@ -403,13 +403,33 @@ export default {
     },
     carSales() {
       carSales(this.requestParams).then((res) => {
-        this.initChartsBar({
-          isRotate: false,
-          id: "bar",
-          title: res.data ? res.data.text : "",
-          data: res.data ? Object.keys(res.data.salesQtyMap || {}) : [],
-          seriesData: res.data ? Object.values(res.data.salesQtyMap || {}) : [],
-        });
+        if (res.data && res.data.salesQtyLastMap !== null) {
+          const data = Object.keys(res.data.salesQtyMap || {});
+          const seriesData = res.data
+            ? Object.values(res.data.salesQtyMap || {})
+            : [];
+          const lastData = Object.values(res.data.salesQtyLastMap || {});
+          const lastTitle = Object.keys(res.data.salesQtyLastMap || {});
+          this.initChartsBar({
+            isRotate: false,
+            id: "bar",
+            title: res.data ? res.data.text : "",
+            data,
+            seriesData,
+            lastData,
+            lastTitle,
+          });
+        } else {
+          this.initChartsBar({
+            isRotate: false,
+            id: "bar",
+            title: res.data ? res.data.text : "",
+            data: res.data ? Object.keys(res.data.salesQtyMap || {}) : [],
+            seriesData: res.data
+              ? Object.values(res.data.salesQtyMap || {})
+              : [],
+          });
+        }
       });
     },
     // 品牌TOP10
@@ -569,9 +589,93 @@ export default {
       );
     },
     // 柱状图
-    initChartsBar({ isRotate, id, title, data, seriesData }) {
+    initChartsBar({
+      isRotate,
+      id,
+      title,
+      data,
+      seriesData,
+      lastData,
+      lastTitle,
+    }) {
+      document.getElementById(id).setAttribute("_echarts_instance_", null);
       const chart = echarts.init(document.getElementById(id));
       if (!chart) return;
+      chart.innerHTML = "";
+      const series = [
+        {
+          xAxisIndex: 0,
+          yAxisIndex: 0,
+          itemStyle: {
+            color: "#43A7FF",
+          },
+          barMaxWidth: 20,
+          z: 3,
+          name: "单位（辆）",
+          type: "bar",
+          data: seriesData,
+          barWidth: "12%",
+        },
+      ];
+      if (lastData) {
+        series.unshift({
+          xAxisIndex: 0,
+          yAxisIndex: 0,
+          itemStyle: {
+            color: "#8fd9f3",
+          },
+          barMaxWidth: 20,
+          z: 3,
+          name: "单位（辆）",
+          type: "bar",
+          data: lastData,
+          barWidth: "12%",
+        });
+      }
+      const tooltip = lastData
+        ? {
+            trigger: "axis",
+            axisPointer: {
+              show: true,
+              status: "shadow",
+              z: -1,
+              shadowStyle: {
+                color: "#E6F7FF",
+              },
+              type: "shadow",
+            },
+            formatter: function (e) {
+              let str = "";
+              const index = e[0].axisIndex;
+              if (!isNaN(lastData[index])) {
+                str +=
+                  lastTitle[index] +
+                  ": " +
+                  formatNum(e[0].value) +
+                  " 单位（辆）";
+                if (!isNaN(seriesData[index])) {
+                  str += "<br/>";
+                }
+              }
+              if (!isNaN(seriesData[index])) {
+                str +=
+                  data[index] + ": " + formatNum(e[1].value) + " 单位（辆）";
+              }
+              return str;
+            },
+          }
+        : {
+            trigger: "axis",
+            axisPointer: {
+              show: true,
+              status: "shadow",
+              z: -1,
+              shadowStyle: {
+                color: "#E6F7FF",
+              },
+              type: "shadow",
+            },
+          };
       this.$nextTick(() => {
         setTimeout(() => {
           chart.setOption({
@@ -590,18 +694,7 @@ export default {
                 saveAsImage: { show: true },
               },
             },
-            tooltip: {
-              trigger: "axis",
-              axisPointer: {
-                show: true,
-                status: "shadow",
-                z: -1,
-                shadowStyle: {
-                  color: "#E6F7FF",
-                },
-                type: "shadow",
-              },
-            },
+            tooltip,
             xAxis: [
               {
                 position: "bottom",
@@ -665,21 +758,7 @@ export default {
                 boundaryGap: ["10%", "10%"],
               },
             ],
-            series: [
-              {
-                xAxisIndex: 0,
-                yAxisIndex: 0,
-                itemStyle: {
-                  color: "#43A7FF",
-                },
-                barMaxWidth: 20,
-                z: 3,
-                name: "单位（辆）",
-                type: "bar",
-                data: seriesData,
-                barWidth: "12%",
-              },
-            ],
+            series,
           });
         }, 100);
       });
