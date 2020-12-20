@@ -7,52 +7,68 @@
         <p>（按年购买，开通后可查询以下数据，不可下载）</p>
       </div>
       <div class="ctr" v-show="radio == '1'">
-        <el-checkbox-group v-model="checkList">
-          <div class="ctr_item">
-            <el-checkbox label="1" disabled>
-              城市汽车销量
-              <p>（包含2016年至今的全国、省份、城市汽车销量）</p>
+        <div class="price-tree">
+          <div
+            class="price-option"
+            v-for="(option, idx) of priceData"
+            :key="idx"
+          >
+            <el-checkbox
+              class="price-option-title"
+              :value="option.checked"
+              @input="() => valueChange(option.id, 1)"
+            >
+              {{ option.text }}
             </el-checkbox>
+            <div class="price-children">
+              <div
+                class="price-item"
+                v-for="(item, ndx) of option.children"
+                :key="ndx"
+              >
+                <el-checkbox
+                  class="price-item-title"
+                  :value="item.checked"
+                  @input="() => valueChange(item.id, 2)"
+                >
+                  {{ item.text }}
+                </el-checkbox>
+              </div>
+            </div>
           </div>
-          <div class="ctr_item">
-            <el-checkbox label="2" disabled>
-              新能源汽车销量
-              <p>（包含2016年至今的全国、省份、城市新能源汽车销量）</p>
-            </el-checkbox>
-          </div>
-          <div class="ctr_item">
-            <el-checkbox label="3" disabled>
-              商用车销量
-              <p>（包含2016年至今的全国、省份、城市商用车销量）</p>
-            </el-checkbox>
-          </div>
-          <div class="ctr_item">
-            <el-checkbox label="4" disabled>
-              城市保有量
-              <p>（包含2016年至今的全国、省份、城市汽车保有量）</p>
-            </el-checkbox>
-          </div>
-        </el-checkbox-group>
+        </div>
         <div v-if="status == '0'" class="btn">
+          <div class="price" v-show="checkId">
+            <div class="price_new">
+              {{
+                `价格：${
+                  Number.isNaN(Number(payAmount)) ? "—" : payAmount
+                }元/年`
+              }}
+            </div>
+          </div>
           <el-checkbox-group
             v-model="checkListdata"
             style="width: 20px; float: left;"
           >
             <el-checkbox label=" "></el-checkbox>
           </el-checkbox-group>
-          <span
-            >我已阅读<span class="protocol" style="color: red;"
-              >《数觉平台用户服务协议》</span
-            >并确认开通账号</span
-          >
-        </div>
-        <div class="price" v-show="checkListdata">
-          <div class="price_new">{{ `价格：${payAmount}元/年` }}</div>
+          <span>
+            我已阅读
+            <span class="protocol" style="color: red;">
+              《数觉平台用户服务协议》
+            </span>
+            并确认开通账号
+          </span>
         </div>
         <div style="text-align: center; padding: 20px 0;">
-          <el-button type="primary" disabled
-            >请通过邮箱联系购买,支付开发中敬请期待...</el-button
+          <el-button
+            type="primary"
+            :disabled="!(checkListdata && checkId)"
+            @click="aliPayPc"
           >
+            请通过邮箱联系购买,支付开发中敬请期待...
+          </el-button>
           <!--          <el-button  v-if="status =='0'" type="primary" :disabled="checkListdata!=true" @click="aliPayPc">支付宝支付</el-button>-->
           <!--          <el-button  v-if="status =='1'" type="primary" disabled>已支付</el-button>-->
         </div>
@@ -97,11 +113,22 @@
 </template>
 
 <script>
-import { payInfo, aliPayPc, dataPack, poster } from "@/api/data";
+import {
+  payInfo,
+  aliPayPc,
+  dataPack,
+  poster,
+  price,
+  getAmount,
+} from "@/api/data";
 export default {
   name: "buy",
   data() {
     return {
+      loading: false,
+      priceData: [],
+      checkId: "",
+      checked: false,
       posterImg: "",
       radio: "1",
       checkList: ["1", "2", "3", "4"],
@@ -111,7 +138,7 @@ export default {
       brand: "",
       city: "",
       remark: "",
-      options: [
+      option: [
         {
           label: "",
         },
@@ -130,6 +157,23 @@ export default {
       status: "",
     };
   },
+  mounted() {
+    this.payInfo();
+    document.title = "申请购买- 数觉 DataVision";
+    poster()
+      .then((res) => {
+        if (res.data[0] && res.data[0].noticeTitleImg) {
+          this.posterImg =
+            process.env.VUE_APP_BASE_API + res.data[0].noticeTitleImg;
+        }
+      })
+      .catch((err) => {});
+    price().then((res) => {
+      if (res.data[0]) {
+        this.priceData = res.data;
+      }
+    });
+  },
   methods: {
     payInfo() {
       payInfo().then((res) => {
@@ -141,11 +185,10 @@ export default {
       });
     },
     aliPayPc() {
-      let { orderNo, payAmount, userId } = this;
-      aliPayPc({ orderNo, payAmount, userId }).then((res) => {
+      this.loading = true;
+      aliPayPc({ salesId: this.checkId }).then((res) => {
         if (res.code === 200) {
-          let msg = res.msg;
-          window.open(msg);
+          window.open(res.data.url);
         }
       });
     },
@@ -163,18 +206,58 @@ export default {
           this.$message.error(err);
         });
     },
-  },
-  mounted() {
-    this.payInfo();
-    document.title = "申请购买- 数觉 DataVision";
-    poster()
-      .then((res) => {
-        if (res.data[0] && res.data[0].noticeTitleImg) {
-          this.posterImg =
-            process.env.VUE_APP_BASE_API + res.data[0].noticeTitleImg;
+    valueChange(val, level) {
+      this.priceData = this.priceData.map((option) => {
+        if (option.id === val) {
+          const checked = !option.checked;
+          const children = option.children.map((v) => ({ ...v, checked }));
+          return {
+            ...option,
+            checked,
+            children,
+          };
+        } else if (option.children.some((v) => v.id === val)) {
+          option.children.map((item) => {
+            if (item.id === val) {
+              item.checked = !item.checked;
+            }
+          });
+          option.checked = option.children.every((item) => item.checked);
         }
-      })
-      .catch((err) => {});
+        return option;
+      });
+      this.getAmount();
+    },
+    getAmount() {
+      let checkArr = [];
+      if (this.priceData.every((v) => v.checked)) {
+        checkArr = ["-1"];
+      } else {
+        checkArr = this.priceData.reduce((arr, option) => {
+          if (option.checked) {
+            arr.push(option.id);
+          } else {
+            option.children.map((item) => {
+              if (item.checked) arr.push(item.id);
+            });
+          }
+          return arr;
+        }, []);
+      }
+      if (checkArr.length === 0) {
+        this.payAmount = "0";
+        this.checkId = "";
+      } else {
+        this.loading = true;
+        this.checkId = checkArr.join(",");
+        getAmount({ id: this.checkId }).then((res) => {
+          if (res.code === 200) {
+            this.loading = false;
+            this.payAmount = res.data.amount;
+          }
+        });
+      }
+    },
   },
   computed: {
     userId: function () {
@@ -218,7 +301,6 @@ export default {
   right: 50px;
   bottom: 50px;
   width: 300px;
-  /* background-image: url("../../assets/image/haibao.jpg"); */
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: contain;
@@ -228,6 +310,9 @@ export default {
   height: 100%;
   margin: 0 auto;
   padding-top: 100px;
+}
+.buy_center >>> .expanded.el-tree-node__expand-icon.el-icon-caret-right {
+  display: none;
 }
 .item_radio p {
   color: #bcbcbc;
@@ -260,5 +345,21 @@ export default {
 .price_new {
   width: 50%;
   color: red;
+}
+.price-tree {
+  padding-bottom: 12px;
+}
+.price-option {
+  padding: 4px 0;
+}
+.price-option-title {
+  padding-bottom: 8px;
+}
+.price-option-title .el-checkbox__label {
+  font-size: 20px;
+  color: #333;
+}
+.price-item {
+  padding: 4px 0 4px 24px;
 }
 </style>

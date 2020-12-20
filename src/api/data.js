@@ -357,3 +357,23 @@ export function poster(data) {
     data,
   });
 }
+
+// http://tang9.free.idcfengye.com/buy/price
+// 购买价格列表
+export function price(query) {
+  return request({
+    url: "/buy/price",
+    method: "get",
+    params: query,
+  });
+}
+
+// http://tang9.free.idcfengye.com/buy/getAmount
+// 金额查询
+export function getAmount(data) {
+  return request({
+    url: "/buy/getAmount",
+    method: "post",
+    data,
+  });
+}

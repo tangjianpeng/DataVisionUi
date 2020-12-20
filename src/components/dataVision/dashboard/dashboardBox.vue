@@ -646,7 +646,7 @@ export default {
             },
             formatter: function (e) {
               let str = "";
-              const index = e[0].axisIndex;
+              const index = e[0].dataIndex;
               if (!isNaN(lastData[index])) {
                 str +=
                   lastTitle[index] +
