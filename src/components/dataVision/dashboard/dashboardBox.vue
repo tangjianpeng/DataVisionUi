@@ -403,33 +403,33 @@ export default {
     },
     carSales() {
       carSales(this.requestParams).then((res) => {
-        if (res.data && res.data.salesQtyLastMap !== null) {
-          const data = Object.keys(res.data.salesQtyMap || {});
-          const seriesData = res.data
-            ? Object.values(res.data.salesQtyMap || {})
-            : [];
-          const lastData = Object.values(res.data.salesQtyLastMap || {});
-          const lastTitle = Object.keys(res.data.salesQtyLastMap || {});
-          this.initChartsBar({
-            isRotate: false,
-            id: "bar",
-            title: res.data ? res.data.text : "",
-            data,
-            seriesData,
-            lastData,
-            lastTitle,
-          });
-        } else {
-          this.initChartsBar({
-            isRotate: false,
-            id: "bar",
-            title: res.data ? res.data.text : "",
-            data: res.data ? Object.keys(res.data.salesQtyMap || {}) : [],
-            seriesData: res.data
-              ? Object.values(res.data.salesQtyMap || {})
-              : [],
-          });
-        }
+        const data = Object.keys(res.data.salesQtyMap || {}).sort(
+          (a, b) =>
+            new Date(a.replace(/^(\d{4}-)(\d)$/, "$10$2")) -
+            new Date(b.replace(/^(\d{4}-)(\d)$/, "$10$2"))
+        );
+        const seriesData = data.map((v) => res.data.salesQtyMap[v]);
+        const lastTitle =
+          res.data.salesQtyLastMap !== null
+            ? Object.keys(res.data.salesQtyLastMap || {}).sort(
+                (a, b) =>
+                  new Date(a.replace(/^(\d{4}-)(\d)$/, "$10$2")) -
+                  new Date(b.replace(/^(\d{4}-)(\d)$/, "$10$2"))
+              )
+            : undefined;
+        const lastData =
+          res.data.salesQtyLastMap !== null
+            ? lastTitle.map((v) => res.data.salesQtyLastMap[v])
+            : undefined;
+        this.initChartsBar({
+          isRotate: false,
+          id: "bar",
+          title: res.data ? res.data.text : "",
+          data,
+          seriesData,
+          lastTitle,
+          lastData,
+        });
       });
     },
     // 品牌TOP10
@@ -595,8 +595,8 @@ export default {
       title,
       data,
       seriesData,
-      lastData,
       lastTitle,
+      lastData,
     }) {
       document.getElementById(id).setAttribute("_echarts_instance_", null);
       const chart = echarts.init(document.getElementById(id));

@@ -141,7 +141,19 @@ export default {
       // 深度观察监听
       deep: true,
     },
-    permissions: function (data) {},
+    permissions: function (data) {
+      if (data.includes("car:data:copy")) {
+        this.$nextTick(() => {
+          document.oncontextmenu = new Function("event.returnValue=true");
+          document.onselectstart = new Function("event.returnValue=true");
+        });
+      } else {
+        this.$nextTick(() => {
+          document.oncontextmenu = new Function("event.returnValue=false");
+          document.onselectstart = new Function("event.returnValue=false");
+        });
+      }
+    },
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"]),

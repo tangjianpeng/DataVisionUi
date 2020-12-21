@@ -83,10 +83,6 @@ export default {
     },
     init() {
       this.$nextTick(() => {
-        // 禁用右键
-        document.oncontextmenu = new Function("event.returnValue=false");
-        // 禁用选择
-        document.onselectstart = new Function("event.returnValue=false");
         let name = this.$route.query.item || "";
         if (name === "1" || !name) this.tabId = "car2";
         if (name === "2") this.tabId = "car4";

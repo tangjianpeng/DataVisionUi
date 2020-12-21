@@ -216,12 +216,6 @@ export default {
     document.title =
       "汽车销量查询_汽车销量数据分析_保有量数据分析等- 数觉 DataVision";
     this.userId = this.$store.getters.userId || "0";
-    this.$nextTick(() => {
-      // 禁用右键
-      document.oncontextmenu = new Function("event.returnValue=false");
-      // 禁用选择
-      document.onselectstart = new Function("event.returnValue=false");
-    });
     let name = this.$route.query.item || "";
     if (name === "1") this.onClickData = "newEnergy_a";
     if (name === "2") this.onClickData = "commercialVehicle_a";

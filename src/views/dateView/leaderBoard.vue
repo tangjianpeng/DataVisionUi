@@ -60,12 +60,6 @@ export default {
   mounted() {
     document.title =
       "汽车排行榜查询_中国汽车销量排行榜_保有量- 数觉 DataVision";
-    this.$nextTick(() => {
-      // 禁用右键
-      document.oncontextmenu = new Function("event.returnValue=false");
-      // 禁用选择
-      document.onselectstart = new Function("event.returnValue=false");
-    });
     this.dvIndustry();
   },
   methods: {
