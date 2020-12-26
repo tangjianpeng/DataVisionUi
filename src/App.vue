@@ -92,6 +92,8 @@ export default {
     document.querySelector("meta[name=viewport]").content =
       "width=1260px, user-scalable=no";
     document.body.style.minWidth = "1260px";
+    document.oncontextmenu = new Function("event.returnValue=false");
+    document.onselectstart = new Function("event.returnValue=false");
   },
   methods: {
     to(data) {

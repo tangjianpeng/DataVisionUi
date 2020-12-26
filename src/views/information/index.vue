@@ -174,7 +174,6 @@ export default {
   top: 100px;
   left: 60px;
   bottom: 50px;
-  width: 200px;
 }
 .container-left-tab >>> .el-tabs--left .el-tabs__nav-wrap.is-left::after {
   width: 0;

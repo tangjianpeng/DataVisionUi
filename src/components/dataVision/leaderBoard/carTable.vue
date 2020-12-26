@@ -7,16 +7,22 @@
         :data="tableData"
         border
       >
-        <el-table-column type="index" label="排名" width="80"></el-table-column>
+        <el-table-column
+          type="index"
+          label="排名"
+          width="120"
+        ></el-table-column>
         <el-table-column
           prop="manfName"
           label="厂商"
           v-if="tableType === 'MN'"
+          width="200"
         ></el-table-column>
         <el-table-column
           prop="brandName"
           label="品牌"
           v-if="tableType === 'BN'"
+          width="200"
         ></el-table-column>
         <el-table-column
           prop="subModelName"
@@ -27,18 +33,21 @@
             tableType !== 'PN' &&
             tableType !== 'CN'
           "
+          width="200"
         >
         </el-table-column>
         <el-table-column
           prop="provinceName"
           label="省份"
           v-if="tableType === 'PN'"
+          width="200"
         >
         </el-table-column>
         <el-table-column
           prop="cityName"
           label="城市"
           v-if="tableType === 'CN'"
+          width="200"
         ></el-table-column>
         <el-table-column
           prop="salesQty"

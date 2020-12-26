@@ -29,7 +29,11 @@
           <div class="item_text">
             <div class="text_t_flex">
               <div class="flex_">
-                <span>{{ type2.industryQty }}</span>
+                <countTo
+                  :startVal="0"
+                  :endVal="Number(type2.industryQty) || 0"
+                  :duration="2000"
+                ></countTo>
                 <p>{{ type2.dateName }}</p>
               </div>
               <div class="flex_">
@@ -58,7 +62,11 @@
           <div class="item_text">
             <div class="text_t_flex">
               <div class="flex_">
-                <span>{{ type1.industryQty }}</span>
+                <countTo
+                  :startVal="0"
+                  :endVal="Number(type1.industryQty) || 0"
+                  :duration="2000"
+                ></countTo>
                 <p v-show="type1.dateName">{{ type1.dateName }}城市销量</p>
                 <p>{{ type1.cityName }}</p>
               </div>
@@ -76,7 +84,11 @@
           <div class="item_text">
             <div class="text_t_flex">
               <div class="flex_">
-                <span>{{ type3.industryQty }}</span>
+                <countTo
+                  :startVal="0"
+                  :endVal="Number(type3.industryQty) || 0"
+                  :duration="2000"
+                ></countTo>
                 <p v-show="type3.dateName">
                   全国狭义乘用车保有量{{ type3.dateName }}
                 </p>
@@ -147,8 +159,9 @@
 </template>
 
 <script>
-import foot from "./footer";
+import countTo from "vue-count-to";
 import { dvIndustry } from "@/api/data";
+import foot from "./footer";
 import "@/assets/swipe/swiper.min.css";
 import "@/assets/swipe/swiper.min.js";
 
@@ -159,6 +172,7 @@ const isMobile =
 export default {
   name: "",
   components: {
+    countTo,
     foot,
   },
   data() {

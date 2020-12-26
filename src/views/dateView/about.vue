@@ -82,7 +82,7 @@ export default {
       if (this.$refs && this.$refs.textRef && this.$refs.imgRef) {
         if (this.$refs.textRef.clientWidth >= 630) {
           this.$refs.textRef.style.height = `${
-            this.$refs.imgRef.clientHeight - 110
+            this.$refs.imgRef.clientHeight - 40
           }px`;
         } else {
           this.$refs.textRef.style.height = "auto";

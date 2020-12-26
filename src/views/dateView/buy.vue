@@ -16,7 +16,7 @@
       <div class="buy_center">
         <div v-show="noticeType == '0'">
           <div class="item_radio">
-            <el-radio v-model="radio1" label="1">开通账号</el-radio>
+            <el-radio v-model="radio1" label="0">开通账号</el-radio>
             <p>（按年购买，开通后可查询以下数据，不可下载）</p>
           </div>
           <div class="ctr">
@@ -61,7 +61,7 @@
                 </div>
               </div>
               <el-checkbox-group
-                v-model="checkListdata"
+                v-model="readAgreement"
                 style="width: 20px; float: left;"
               >
                 <el-checkbox label=" "></el-checkbox>
@@ -77,7 +77,7 @@
             <div style="text-align: center; padding: 20px 0;">
               <el-button
                 type="primary"
-                :disabled="!(checkListdata && checkId)"
+                :disabled="!(readAgreement && checkId)"
                 @click="aliPayPc"
               >
                 提交申请
@@ -87,32 +87,36 @@
         </div>
         <div v-show="noticeType == '1'">
           <div class="item_radio">
-            <el-radio v-model="radio2" label="2">购买数据包</el-radio>
+            <el-radio v-model="radio2" label="1">购买数据包</el-radio>
             <p>（按次购买，以源数据Excel表格形式交付）</p>
           </div>
           <div class="item_list">
-            <div class="item">
-              <span>时间：</span>
-              <el-input
-                v-model="ymId"
-                placeholder="例子：2020年1月-2020年12月"
-              ></el-input>
-            </div>
-            <div class="item">
-              <span>品牌车型：</span>
-              <el-input v-model="brand" placeholder="例子：奥迪A6"></el-input>
-            </div>
-            <div class="item">
-              <span>省份城市：</span>
-              <el-input
-                v-model="city"
-                placeholder="例子：广东省广州市"
-              ></el-input>
-            </div>
-            <div class="item">
-              <span>其它需求：</span>
-              <el-input v-model="remark" placeholder=""></el-input>
-            </div>
+            <el-form
+              ref="buyFormRef"
+              :model="buyForm"
+              :rules="formRules"
+              label-width="120px"
+              class="buy-form"
+            >
+              <el-form-item label="时间：" prop="ymId">
+                <el-input
+                  v-model="buyForm.ymId"
+                  placeholder="例子：2020年1月-2020年12月"
+                />
+              </el-form-item>
+              <el-form-item label="品牌车型：" prop="brand">
+                <el-input v-model="buyForm.brand" placeholder="例子：奥迪A6" />
+              </el-form-item>
+              <el-form-item label="省份城市：" prop="city">
+                <el-input
+                  v-model="buyForm.city"
+                  placeholder="例子：广东省广州市"
+                />
+              </el-form-item>
+              <el-form-item label="其它需求：">
+                <el-input v-model="buyForm.remark" placeholder="" />
+              </el-form-item>
+            </el-form>
           </div>
           <div class="ctr">
             <div style="text-align: center; padding: 20px 0;">
@@ -139,38 +143,30 @@ export default {
   name: "buy",
   data() {
     return {
-      noticeType: "0",
-      posterImg: "",
-
       loading: false,
+      noticeType: "0",
+      radio1: "0",
+      radio2: "1",
       priceData: [],
       checkId: "",
-      checked: false,
+      payAmount: "",
       posterImg: "",
-      radio1: "1",
-      radio2: "2",
-      checkList: ["1", "2", "3", "4"],
-      checkListdata: "",
-      value: "",
+      readAgreement: "",
       ymId: "",
       brand: "",
       city: "",
       remark: "",
-      option: [
-        {
-          label: "",
-        },
-        {
-          label: "",
-        },
-        {
-          label: "",
-        },
-        {
-          label: "",
-        },
-      ],
-      payAmount: "",
+      buyForm: {
+        ymId: "",
+        brand: "",
+        city: "",
+        remark: "",
+      },
+      formRules: {
+        ymId: [{ required: true, trigger: "blur", message: "时间不能为空" }],
+        // brand: [{ required: true, trigger: "blur", message: "品牌不能为空" }],
+        // city: [{ required: true, trigger: "blur", message: "城市不能为空" }],
+      },
     };
   },
   mounted() {
@@ -190,7 +186,10 @@ export default {
     });
   },
   methods: {
-    handleClick(tab) {},
+    handleClick(tab) {
+      this.$refs.buyFormRef && this.$refs.buyFormRef.resetFields();
+      this.buyForm.remark = "";
+    },
     aliPayPc() {
       this.loading = true;
       aliPayPc({ salesId: this.checkId }).then((res) => {
@@ -200,18 +199,21 @@ export default {
       });
     },
     dataPack() {
-      const { ymId, brand, city, remark } = this;
-      dataPack({ ymId, brand, city, remark })
-        .then((res) => {
-          if (res.code === 200) {
-            this.$message.success(res.msg);
-          } else {
-            this.$message.error(res.msg);
-          }
-        })
-        .catch((err) => {
-          this.$message.error(err);
-        });
+      this.$refs.buyFormRef.validate((valid) => {
+        if (valid) {
+          dataPack({ ...this.buyForm })
+            .then((res) => {
+              if (res.code === 200) {
+                this.$message.success(res.msg);
+              } else {
+                this.$message.error(res.msg);
+              }
+            })
+            .catch((err) => {
+              this.$message.error(err);
+            });
+        }
+      });
     },
     valueChange(val, level) {
       this.priceData = this.priceData.map((option) => {
@@ -288,9 +290,8 @@ export default {
 .container-left-tab {
   position: fixed;
   top: 100px;
-  left: 0px;
+  left: 20px;
   bottom: 50px;
-  width: 260px;
 }
 .container-left >>> .el-tabs--left .el-tabs__nav-wrap.is-left::after {
   width: 0;
