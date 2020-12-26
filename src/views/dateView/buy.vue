@@ -125,6 +125,18 @@
           </div>
         </div>
       </div>
+      <!-- <el-dialog
+        title="支付"
+        :visible.sync="dialogVisible"
+        :before-close="handleClose"
+      >
+        <iframe :src="payUrl" width="1080px" height="860px" />
+        <div class="pay-button">
+          <el-button type="primary" @click="handleClose">
+            支付完成
+          </el-button>
+        </div>
+      </el-dialog> -->
     </div>
     <div class="container-right">
       <div
@@ -167,6 +179,8 @@ export default {
         // brand: [{ required: true, trigger: "blur", message: "品牌不能为空" }],
         // city: [{ required: true, trigger: "blur", message: "城市不能为空" }],
       },
+      dialogVisible: false,
+      payUrl: "",
     };
   },
   mounted() {
@@ -194,7 +208,10 @@ export default {
       this.loading = true;
       aliPayPc({ salesId: this.checkId }).then((res) => {
         if (res.code === 200) {
-          window.open(res.data.url);
+          // this.dialogVisible = true;
+          // this.payUrl = res.data.url;
+          window.location.href = res.data.url;
+          // window.open(res.data.url);
         }
       });
     },
@@ -266,6 +283,10 @@ export default {
           }
         });
       }
+    },
+    handleClose() {
+      this.dialogVisible = false;
+      this.payUrl = "";
     },
   },
   computed: {
@@ -420,5 +441,13 @@ export default {
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: contain;
+}
+.container .container-center >>> .el-dialog {
+  width: 1140px;
+  margin-top: 100px !important;
+}
+.pay-button {
+  padding: 16px 0;
+  text-align: center;
 }
 </style>
