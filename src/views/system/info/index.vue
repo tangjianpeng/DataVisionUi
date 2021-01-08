@@ -1,26 +1,26 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="公告标题" prop="noticeTitle">
+      <el-form-item label="资讯标题" prop="noticeTitle">
         <el-input
           v-model="queryParams.noticeTitle"
-          placeholder="请输入公告标题"
+          placeholder="请输入资讯标题"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="操作人员" prop="createBy">
+      <el-form-item label="创建人员" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
-          placeholder="请输入操作人员"
+          placeholder="请输入创建人员"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="类型" prop="noticeType">
-        <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable size="small">
+      <el-form-item label="资讯类型" prop="noticeType">
+        <el-select v-model="queryParams.noticeType" placeholder="资讯类型" clearable size="small">
           <el-option
             v-for="dict in typeOptions"
             :key="dict.dictValue"
@@ -42,7 +42,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:notice:add']"
+          v-hasPermi="['system:info:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -52,7 +52,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:notice:edit']"
+          v-hasPermi="['system:info:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -62,7 +62,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:notice:remove']"
+          v-hasPermi="['system:info:remove']"
         >删除</el-button>
       </el-col>
     </el-row>
@@ -71,13 +71,13 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="序号" align="center" prop="noticeId" width="100" />
       <el-table-column
-        label="公告标题"
+        label="资讯标题"
         align="center"
         prop="noticeTitle"
         :show-overflow-tooltip="true"
       />
       <el-table-column
-        label="公告类型"
+        label="资讯类型"
         align="center"
         prop="noticeType"
         :formatter="typeFormat"
@@ -103,14 +103,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:notice:edit']"
+            v-hasPermi="['system:info:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:notice:remove']"
+            v-hasPermi="['system:info:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -124,17 +124,17 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改公告对话框 -->
+    <!-- 添加或修改资讯对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="公告标题" prop="noticeTitle">
-              <el-input v-model="form.noticeTitle" placeholder="请输入公告标题" />
+            <el-form-item label="资讯标题" prop="noticeTitle">
+              <el-input v-model="form.noticeTitle" placeholder="请输入资讯标题" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="公告类型" prop="noticeType">
+            <el-form-item label="资讯类型" prop="noticeType">
               <el-select v-model="form.noticeType" placeholder="请选择">
                 <el-option
                   v-for="dict in typeOptions"
@@ -145,8 +145,34 @@
               </el-select>
             </el-form-item>
           </el-col>
+
           <el-col :span="24">
-            <el-form-item label="状态">
+            <el-form-item label="资讯主图" prop="noticeTitleImg">
+              <el-upload
+                class="avatar-uploader"
+                :show-file-list="false"
+                :multiple="false"
+                ref="upload"
+                :limit="1"
+                accept=".jpeg,.bmp,.jpg, .png"
+                :action="upload.url"
+                :headers="upload.headers"
+                :file-list="upload.fileList"
+                :on-progress="handleFileUploadProgress"
+                :on-success="handleFileSuccess"
+                :auto-upload="true">
+                <img v-if="noticeTitleImg" :src="noticeTitleImg" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+          <el-form-item label="资讯简介">
+            <el-input v-model="form.noticeSynopsis" type="textarea" placeholder="请输入内容"></el-input>
+          </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="资讯状态">
               <el-radio-group v-model="form.status">
                 <el-radio
                   v-for="dict in statusOptions"
@@ -157,7 +183,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="内容">
+            <el-form-item label="资讯详情">
               <Editor v-model="form.noticeContent" />
             </el-form-item>
           </el-col>
@@ -174,13 +200,15 @@
 <script>
 import { listNotice, getNotice, delNotice, addNotice, updateNotice, exportNotice } from "@/api/system/notice";
 import Editor from '@/components/Editor';
+import { getToken } from "@/utils/auth";
 
 export default {
-  name: "Notice",
+  name: "Info",
   components: {
     Editor
   },
   data() {
+
     return {
       // 遮罩层
       loading: true,
@@ -192,7 +220,7 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 公告表格数据
+      // 资讯表格数据
       noticeList: [],
       // 弹出层标题
       title: "",
@@ -202,41 +230,61 @@ export default {
       statusOptions: [],
       // 状态数据字典
       typeOptions: [],
+
+      // 上传参数
+      upload: {
+        // 是否禁用上传
+        isUploading: false,
+        // 设置上传的请求头部
+        headers: { Authorization: "Bearer " + getToken() },
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + "/common/upload",
+        // 上传的文件列表
+        fileList: []
+      },
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        type:"2",
+        type: "1",
         noticeTitle: undefined,
         createBy: undefined,
         status: undefined
+
       },
+
       // 表单参数
       form: {
-        type:"2"
+
       },
       // 表单校验
       rules: {
         noticeTitle: [
-          { required: true, message: "公告标题不能为空", trigger: "blur" }
+          { required: true, message: "资讯标题不能为空", trigger: "blur" }
         ],
         noticeType: [
-          { required: true, message: "公告类型不能为空", trigger: "blur" }
-        ]
-      }
+          { required: true, message: "资讯类型不能为空", trigger: "blur" }
+        ],
+        // noticeTitleImg: [
+        //   { required: true, message: "标题图不能为空", trigger: "blur" }
+        // ],
+      },
+      noticeTitleImg: ""
     };
+
   },
+
   created() {
     this.getList();
     this.getDicts("sys_notice_status").then(response => {
       this.statusOptions = response.data;
     });
-    this.getDicts("sys_notice_type").then(response => {
+    this.getDicts("sys_info_type").then(response => {
       this.typeOptions = response.data;
     });
   },
   methods: {
-    /** 查询公告列表 */
+    /** 查询资讯列表 */
     getList() {
       this.loading = true;
       listNotice(this.queryParams).then(response => {
@@ -245,11 +293,11 @@ export default {
         this.loading = false;
       });
     },
-    // 公告状态字典翻译
+    // 资讯状态字典翻译
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
-    // 公告状态字典翻译
+    // 资讯状态字典翻译
     typeFormat(row, column) {
       return this.selectDictLabel(this.typeOptions, row.noticeType);
     },
@@ -265,7 +313,10 @@ export default {
         noticeTitle: undefined,
         noticeType: undefined,
         noticeContent: undefined,
-        status: "0"
+        noticeTitleImg: undefined,
+        noticeSynopsis:undefined,
+        status: "0",
+        type: "1"
       };
       this.resetForm("form");
     },
@@ -288,8 +339,10 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.noticeTitleImg = "";
+      this.upload.fileList = [];
       this.open = true;
-      this.title = "添加公告";
+      this.title = "添加资讯";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -297,10 +350,30 @@ export default {
       const noticeId = row.noticeId || this.ids
       getNotice(noticeId).then(response => {
         this.form = response.data;
+        this.noticeTitleImg = process.env.VUE_APP_BASE_API + response.data.noticeTitleImg;
+        this.form.noticeTitleImg = response.data.noticeTitleImg;
+        //this.upload.fileList = [{ name: this.form.fileName, url: this.form.filePath }];
         this.open = true;
-        this.title = "修改公告";
+        this.title = "修改资讯";
       });
     },
+
+    // // 文件提交处理
+    // submitUpload() {
+    //   this.$refs.upload.submit();
+    // },
+    // 文件上传中处理
+    handleFileUploadProgress(event, file, fileList) {
+      this.upload.isUploading = true;
+    },
+    // 文件上传成功处理
+    handleFileSuccess(response, file, fileList) {
+      this.upload.isUploading = false;
+      this.form.noticeTitleImg = response.fileName;
+      this.noticeTitleImg =   process.env.VUE_APP_BASE_API + response.fileName;
+      this.msgSuccess(response.msg);
+    },
+
     /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
@@ -308,7 +381,7 @@ export default {
           if (this.form.noticeId != undefined) {
             updateNotice(this.form).then(response => {
               if (response.code === 200) {
-                this.msgSuccess("修改成功");
+                this.msgSuccess("修改资讯");
                 this.open = false;
                 this.getList();
               }
@@ -316,7 +389,7 @@ export default {
           } else {
             addNotice(this.form).then(response => {
               if (response.code === 200) {
-                this.msgSuccess("新增成功");
+                this.msgSuccess("新增资讯");
                 this.open = false;
                 this.getList();
               }
@@ -328,7 +401,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const noticeIds = row.noticeId || this.ids
-      this.$confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除资讯编号为"' + noticeIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -342,3 +415,29 @@ export default {
   }
 };
 </script>
+
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>

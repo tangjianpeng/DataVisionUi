@@ -40,7 +40,14 @@ const toolbarOptions = [
   [{ color: [] }, { background: [] }],             // 字体颜色、字体背景颜色
   [{ align: [] }],                                 // 对齐方式
   ["clean"],                                       // 清除文本格式
-  ["link", "image", "video"]                       // 链接、图片、视频
+  ["link", "image", "video"] ,                  // 链接、图片、视频
+  // [
+  //   {'table': 'TD'},
+  //   {'table-insert-row': 'TIR'},
+  //   {'table-insert-column': 'TIC'},
+  //   {'table-delete-row': 'TDR'},
+  //   {'table-delete-column': 'TDC'}
+  // ]
 ];
 
 import { quillEditor } from "vue-quill-editor";
@@ -135,6 +142,7 @@ export default {
         this.$message.error("图片插入失败");
       }
     },
+
     // 富文本图片上传失败
     uploadError() {
       // loading动画消失
@@ -142,7 +150,7 @@ export default {
     }
   }
 };
-</script> 
+</script>
 
 <style>
 .editor {

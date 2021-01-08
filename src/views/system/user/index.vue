@@ -158,7 +158,7 @@
           <el-table-column label="邮箱" align="center" prop="email" :show-overflow-tooltip="true" />
           <el-table-column label="公司" align="center" prop="company" :show-overflow-tooltip="true" />
           <el-table-column label="类型" align="center" prop="dept.deptName" :show-overflow-tooltip="true" />
-          <el-table-column label="登录IP" align="center" prop="loginIp" :show-overflow-tooltip="true" />
+<!--          <el-table-column label="登录IP" align="center" prop="loginIp" :show-overflow-tooltip="true" />-->
           <el-table-column label="登录时间" align="center" prop="loginDate" width="160" >
             <template slot-scope="scope">
               <span>{{scope.row.loginDate}}</span>
@@ -504,7 +504,6 @@ export default {
     /** 查询用户类型 */
     getDeptName(){
       getDeptName().then(response=>{
-        console.log(response.data);
         this.deptNameOptions = response.data;
       })
     },

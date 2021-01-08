@@ -277,12 +277,12 @@ export function salesRankList(data) {
 }
 
 //获取支付信息
-export function payInfo() {
-  return request({
-    url: "/buy/payInfo",
-    method: "post",
-  });
-}
+// export function payInfo() {
+//   return request({
+//     url: "/buy/payInfo",
+//     method: "post",
+//   });
+// }
 
 //获取支付页面
 export function aliPayPc(data) {
